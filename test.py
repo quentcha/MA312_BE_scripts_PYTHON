@@ -1,6 +1,7 @@
+
 import numpy as np
 import matplotlib.pyplot as plt
-
+'''
 # %% pour la fonction cos
 a = -10
 b = 10
@@ -51,3 +52,13 @@ ax[1].plot(alpha, TF(alpha), 'g')
 ax[1].legend()
 
 plt.show()
+'''
+fe=44100
+freq=392
+duree=1
+t=np.linspace(0,duree,fe*duree)
+amplitude=1
+la=amplitude*np.sin(2*np.pi*t*freq)
+import sounddevice as sd
+sd.play (la, fe)
+sd.wait()
