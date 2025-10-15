@@ -1,4 +1,3 @@
-#bite
 import numpy as np
 import matplotlib.pyplot as plt
 '''
@@ -52,7 +51,7 @@ ax[1].plot(alpha, TF(alpha), 'g')
 ax[1].legend()
 
 plt.show()
-'''
+
 fe=44100
 freq=392
 duree=1
@@ -62,3 +61,21 @@ la=amplitude*np.sin(2*np.pi*t*freq)
 import sounddevice as sd
 sd.play (la, fe)
 sd.wait()
+'''
+import sounddevice as sd
+import time
+import numpy as np
+import matplotlib.pyplot as plt
+fe =1000
+duree = 5 #secondes
+monenregistrement= sd.rec(int(duree * fe), samplerate=fe, channels =1, dtype='float32')   # sert à enregistrer
+sd.wait()
+print("play")
+sd.play(monenregistrement,fe)
+time.sleep(len(monenregistrement) / fe)#permet au programme d’attendre la fin de la lecture du son avant de se terminer
+sd.stop()
+
+i=np.linspace(0, len(monenregistrement), len(monenregistrement))
+print(len(monenregistrement), fe)
+plt.plot(i, monenregistrement)
+plt.show()
