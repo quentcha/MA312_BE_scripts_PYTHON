@@ -1,6 +1,8 @@
-import numpy as np
-from scipy.io import wavfile
 import sounddevice as sd
+import time
+from scipy.io import wavfile
+import numpy as np
+import matplotlib.pyplot as plt
 
 """On définit les 6 plages de fréquences auxquelles on appliquera les coefficients pris en compte dans la fonction:
 Basse : 0-100 Hz
@@ -13,9 +15,9 @@ Médium-aigu : 401-800 Hz
 
 Aigu : 0,801-1,6 kHz
 
-Très aigu: 1,6-3,2 kHz"""
+Très aigu: 1,6-5 kHz"""
 
-Très aigu : 3,2 kHz
+
 def egalisateur(data, k1, k2, k3, k4, k5, k6): # Soient ki, les coefficients multiplicateurs des bandes définies
 
     fe, x = wavfile.read(data)
@@ -45,25 +47,39 @@ def egalisateur(data, k1, k2, k3, k4, k5, k6): # Soient ki, les coefficients mul
     a_index_max = np.searchsorted(freq, 1600)
 
     ta_index_min = np.searchsorted(freq, 1601)     #Très aigu
-    ta_index_max = np.searchsorted(freq, 3200)
+    ta_index_max = np.searchsorted(freq, 5000)
 
 
     # On applique les facteurs à leur plage de fréquences:
 
-    spectre_filtre = spectre.copy() # Créez une copie pour ne pas modifier l'original
+    spectre_filtre = spectre.copy()
 
     spectre_filtre[b_index_min:b_index_max] = k1 * spectre_filtre[b_index_min:b_index_max]
     spectre_filtre[bm_index_min:bm_index_max] = k2 * spectre_filtre[bm_index_min:bm_index_max]
     spectre_filtre[mg_index_min:mg_index_max] = k3 * spectre_filtre[mg_index_min:mg_index_max]
-    spectre_filtre[bm_index_min:bm_index_max] = k2 * spectre_filtre[bm_index_min:bm_index_max]
+    spectre_filtre[ma_index_min:ma_index_max] = k4 * spectre_filtre[ma_index_min:ma_index_max]
+    spectre_filtre[a_index_min:a_index_max] = k5 * spectre_filtre[a_index_min:a_index_max]
+    spectre_filtre[ta_index_min:ta_index_max] = k6 * spectre_filtre[ta_index_min:ta_index_max]
 
+    # On renvoie le plot du spectre initial et du spectre égalisé pour pouvoir les comparer:
 
+    #plt.plot(freq, np.abs(spectre), "g")
+    #plt.plot(freq, np.abs(spectre_filtre), "r")
+    #plt.show()
 
-    # --- 4. Reconstruire le signal avec la transformée inverse ---
-    son_filtre = np.fft.irfft(spectre_filtre)
+    # On applique la transformée inverse de Fourier pour récupérer le son égalisé:
 
-    # --- 5. Écouter le son reconstruit ---
-    # Vous pouvez aussi l'enregistrer dans un fichier wav si vous préférez
-    # wavfile.write('guitare_filtree.wav', fe, son_filtre.astype(np.int16))
-    sd.play(son_filtre, fe)
-    status = sd.wait() # Attendre que le son soit joué
+    son = np.fft.irfft(spectre_filtre)
+    sd.play(son, fe)
+    time.sleep(len(son) / fe)  # permet d'écouter un son
+    sd.stop()
+
+    # Optionnel: on peut jouer à la suite les deux sons pour les comparer.
+    #sd.play(x,fe)
+    #time.sleep(len(son) / fe)  # permet d'écouter un son
+    #sd.stop()
+
+ # TEST
+
+#egalisateur("guitare1.wav", 0.5, 0.5, 4, 3.5, 4, 5)
+#egalisateur("Série_de_Fourier_BE_Ma312_2025.wav", 0.5, 1.5, 0.5, 1.5, 0.5, 1.5)
