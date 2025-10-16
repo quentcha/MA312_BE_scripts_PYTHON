@@ -62,7 +62,8 @@ def egalisateur(data, k1, k2, k3, k4, k5, k6): # Soient ki, les coefficients mul
     spectre_filtre[ta_index_min:ta_index_max] = k6 * spectre_filtre[ta_index_min:ta_index_max]
 
     # On renvoie le plot du spectre initial et du spectre égalisé pour pouvoir les comparer:
-
+    #plt.xlabel("Fréquence (Hz)")
+    #plt.ylabel("Amplitude")
     #plt.plot(freq, np.abs(spectre), "g")
     #plt.plot(freq, np.abs(spectre_filtre), "r")
     #plt.show()
