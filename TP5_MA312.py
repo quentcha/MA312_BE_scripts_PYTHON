@@ -22,6 +22,7 @@ plt.show()
 sd.play(data, fe)
 time.sleep(len(data) / fe)#permet au programme d’attendre la fin de la lecture du son avant de se terminer
 sd.stop()
+'''
 ################################## Q.2
 def f(amplitude,t,freq):
     return amplitude*np.sin(2*np.pi*t*freq)
@@ -41,7 +42,7 @@ plt.show()
 sd.play(signal, fe)
 time.sleep(len(signal) / fe)#permet au programme d’attendre la fin de la lecture du son avant de se terminer
 sd.stop()
-
+'''
 ######################Q.5
 fe, data= wavfile.read('guitare1.wav')
 data = data.astype(np.float32)
@@ -60,7 +61,7 @@ plt.plot(freq, spectre_abs)
 plt.xlabel("Frequence , Hz " )
 plt.ylabel("Amplitude")
 plt.show()
-'''
+
 ###############Q.4.5
 fe, data= wavfile.read('guitare1.wav')
 data = data.astype(np.float32)
@@ -75,3 +76,4 @@ plt.plot(np.abs(spectre))
 plt.xlabel("Frequence , Hz " )
 plt.ylabel("Amplitude")
 plt.show()
+'''
