@@ -76,11 +76,11 @@ def egalisateur(data, k1, k2, k3, k4, k5, k6): # Soient ki, les coefficients mul
     sd.stop()
 
     # Optionnel: on peut jouer à la suite les deux sons pour les comparer.
-    #sd.play(x,fe)
-    #time.sleep(len(son) / fe)  # permet d'écouter un son
-    #sd.stop()
+    sd.play(x,fe)
+    time.sleep(len(son) / fe)  # permet d'écouter un son
+    sd.stop()
 
  # TEST
 
-#egalisateur("guitare1.wav", 0.5, 0.5, 4, 3.5, 4, 5)
-#egalisateur("Série_de_Fourier_BE_Ma312_2025.wav", 0.5, 1.5, 0.5, 1.5, 0.5, 1.5)
+#egalisateur("guitare1.wav", 10, 10, 1, 1, 1, 1)
+#egalisateur("Série_de_Fourier_BE_Ma312_2025.wav", 10, 10, 0.5, 0.5, 0.5, 0.5)
