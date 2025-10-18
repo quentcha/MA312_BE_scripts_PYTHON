@@ -13,7 +13,7 @@ def pitch_shift_fft(signal, shift_factor):
     for k in range(k_max):
         new_k = int(k * shift_factor)
         if new_k < len(spec):
-            new_spec[new_k] = spec[k]
+            new_spec[k] = spec[new_k]
 
     # Retour au temps
     shifted = np.fft.irfft(new_spec, n=N)
@@ -24,7 +24,7 @@ data = data.astype(np.float32)
 if data.ndim == 2 : #stéréo -> mono si besoin
     data = data.mean(axis =1)
 data = np.block([data, np.zeros(2**(int(np.log2(len(data)))+1)-len(data))])
-play.sound(pitch_shift_fft(data,4),fe)
+play.sound(pitch_shift_fft(data,2),fe)
 
 '''
 ##############################ECHO
