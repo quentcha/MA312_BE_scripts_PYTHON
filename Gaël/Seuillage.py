@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 
 
-def filtrage_amp(data, A1, A2): # Soient A1 et A2 les amplitudes des bornes
+def seuillage(data, thau, k): # Soit thau le seuil et k le coefficient de réduction
 
     fe, x = wavfile.read(data)
     x = x.astype(np.float32)
@@ -19,11 +19,11 @@ def filtrage_amp(data, A1, A2): # Soient A1 et A2 les amplitudes des bornes
     spectre = np.fft.rfft(x)                    # On calcule le spectre du signal avec la transformée de Fourier
     freq = np.fft.rfftfreq(len(x), d=1.0/fe)
 
-    spectre_filtre = []     # On crée une liste vide qui va accueillir le spectre filtré
+    spectre_filtre = []  # On crée une liste vide qui va accueillir le spectre filtré
     for i in range(len(spectre)):
         a = np.abs(spectre[i])
-        if a < A1 or a > A2:
-            spectre_filtre.append(0)
+        if a < thau:
+            spectre_filtre.append(k * a)
         else:
             spectre_filtre.append(a)
 
@@ -35,7 +35,6 @@ def filtrage_amp(data, A1, A2): # Soient A1 et A2 les amplitudes des bornes
     plt.ylabel("Amplitude")
     plt.plot(freq, np.abs(spectre), "r")
     plt.plot(freq, np.abs(spectre_filtre), "g")
-    plt.grid(True)
     plt.show()
 
     # On applique la transformée inverse de Fourier pour récupérer le son égalisé:
@@ -52,5 +51,6 @@ def filtrage_amp(data, A1, A2): # Soient A1 et A2 les amplitudes des bornes
 
  # TEST
 
-filtrage_amp("guitare1.wav", 2000, 8000)
-#filtrage_amp("Série_de_Fourier_BE_Ma312_2025.wav", 0, 6000)
+#seuillage("guitare1.wav", 4000, 0)
+seuillage("guitare1.wav", 8000, 0.5)
+#seuillage("Série_de_Fourier_BE_Ma312_2025.wav", 8000, 0 )
