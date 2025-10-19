@@ -22,6 +22,7 @@ plt.show()
 sd.play(data, fe)
 time.sleep(len(data) / fe)#permet au programme d’attendre la fin de la lecture du son avant de se terminer
 sd.stop()
+
 ################################## Q.2
 def f(amplitude,t,freq):
     return amplitude*np.sin(2*np.pi*t*freq)
