@@ -4,11 +4,6 @@ from scipy.io import wavfile
 import numpy as np
 import matplotlib.pyplot as plt
 
-fe, x = wavfile.read("guitare1.wav")
-x = x.astype(np.float32)
-if x.ndim == 2:
-    x = x.mean(axis=1)
-x /= (np.max(np.abs(x)) + 1e-12)
 
 def delay(signal, sampling_rate, delay_time=0.5, feedback=0.5, mix=0.5):
     """
