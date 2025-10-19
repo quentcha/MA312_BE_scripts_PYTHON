@@ -1,64 +1,39 @@
-#bite
 import numpy as np
-import matplotlib.pyplot as plt
-'''
-# %% pour la fonction cos
-a = -10
-b = 10
-fe = 3
-N = int((b - a) / (2 * np.pi) * fe)
-kTe = np.linspace(a, b, N)
-ech = np.cos(kTe)
-Te = kTe[1] - kTe[0]
-
-def sinc(x):
-    if x == 0:
-        return 1
-    else:
-        return np.sin(x) / x
-
-vecsinc = np.vectorize(sinc)
-
-def reconstru(t, ech, kTe, Te):
-    l = len(t)
-    s = np.zeros(l)
-    indsomme = len(ech)
-    for i in range(l):
-        st = 0
-        for k in range(indsomme):
-            st += ech[k] * vecsinc(np.pi * (t[i] - kTe[k]) / Te)
-        s[i] = st
-    return s
-
-t = np.linspace(a, b, 1000)
-signal_recons = reconstru(t, ech, kTe, Te)
-
-fig, ax = plt.subplots(2, figsize=(15, 7))
-fig.suptitle("TD3 : Exercice 1 : théorème d'échantillonnage")
-ax[0].set_title(f"Échantillonnage pour fe = {fe}")
-ax[0].plot(t, np.cos(t), 'b', label="signal originel")
-ax[0].plot(t, signal_recons, '-r', label="signal reconstruit")
-ax[0].plot(kTe, ech, 'og', label="points échantillonnés")
-ax[0].legend()
-
-def TF(alpha):
-    s = 10 * (vecsinc(10 * (1 - alpha)) + vecsinc(10 * (1 + alpha)))
-    return s
-
-alpha = np.linspace(-50, 50, 10000)
-ax[1].set_title("Graphe de la transformée de Fourier")
-ax[1].axvspan(-2 * np.pi * fe, 2 * np.pi * fe, alpha=0.5, color='red', label="plage des fréquences conservées")
-ax[1].plot(alpha, TF(alpha), 'g')
-ax[1].legend()
-
-plt.show()
-'''
-fe=44100
-freq=392
-duree=1
-t=np.linspace(0,duree,fe*duree)
-amplitude=1
-la=amplitude*np.sin(2*np.pi*t*freq)
+from scipy.io import wavfile
 import sounddevice as sd
-sd.play (la, fe)
-sd.wait()
+import time
+
+def sound(data,fe):
+    data_norm = data / (np.max(np.abs(data)) + 1e-12)
+    sd.play(data_norm, fe)
+    time.sleep(len(data_norm) / fe)#permet au programme d’attendre la fin de la lecture du son avant de se terminer
+    sd.stop()
+
+def pitch_shift_no_interp(data, n_octave):
+    """Décale la hauteur selon le changement d’échelle, sans interpolation."""
+    factor = 2 ** n_octave  # 2 pour +1 octave, 0.5 pour -1
+    N = len(data)
+
+    # FFT directe
+    spectre = np.fft.rfft(data)
+    freq = np.fft.rfftfreq(N)
+
+    # Échelle fréquentielle
+    new_len = int(len(spectre) / factor)
+    spectre_shifted = np.zeros_like(spectre, dtype=complex)
+    spectre_shifted[:new_len] = spectre[:new_len] * factor  # amplification du module (1/|a|)
+
+    # Retour temporel
+    data_shifted = np.fft.irfft(spectre_shifted)
+
+    # Comme on change d’échelle temporelle, la fréquence d’échantillonnage change aussi
+    return data_shifted, factor
+
+# Exemple d’usage :
+fe, data = wavfile.read("guitare1.wav")
+sound(data,fe)
+data = data.mean(axis=1) if data.ndim == 2 else data
+data = data.astype(np.float32)
+
+y, facteur = pitch_shift_no_interp(data, n_octave=3)  # +1 octave
+sound(y,int(fe*facteur))
