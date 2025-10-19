@@ -16,9 +16,9 @@ def delay(signal, sampling_rate, delay_time=0.5, feedback=0.5, mix=0.5):
 
     :param signal: Le signal audio d'entrée
     :param sampling_rate: Le taux d'échantillonnage (Hz)
-    :param delay_time: Temps de retard en secondes
-    :param feedback: Rétroaction (feedback)
-    :param mix: Mixage du signal traité (entre 0 et 1)
+    :param delay_time: Temps de retard en secondes entre les échos
+    :param feedback: Rétroaction, détermine l'amplitude des échos (si en dessous de 1, alors l'amplitude de l'écho décroit à chaque répétition)
+    :param mix: Mixage du signal traité (entre 0 et 1), caractérise l'équilibre entre le signal et les échos ( 0 = signal original, 1 = uniquement les échos)
     :return: Signal avec l'effet de délai appliqué
     """
 
@@ -49,5 +49,14 @@ def delay(signal, sampling_rate, delay_time=0.5, feedback=0.5, mix=0.5):
     return output.astype(dtype)
 
 #TEST
+fe, x = wavfile.read("guitare1.wav")
+x = x.astype(np.float32)
+if x.ndim == 2:
+    x = x.mean(axis=1)
+x /= (np.max(np.abs(x)) + 1e-12)
 
-x_delay = delay(x, 44100, 0.5, 0.5, 0.5)
+x_delay = delay(x, 44100, 0.7, 0.5, 0.5)
+
+sd.play(x_delay, fe)
+time.sleep(len(x_delay) / fe)  # permet d'écouter un son
+sd.stop()
