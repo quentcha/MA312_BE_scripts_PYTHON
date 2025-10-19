@@ -19,7 +19,7 @@ def filtrage_amp(data, A1, A2): # Soient A1 et A2 les amplitudes des bornes
     spectre = np.fft.rfft(x)                    # On calcule le spectre du signal avec la transformée de Fourier
     freq = np.fft.rfftfreq(len(x), d=1.0/fe)
 
-    spectre_filtre = []     # On crée une liste vide qui va accueillir le spectre filtré
+    spectre_filtre = np.zeros(len(spectre), dtype = complex)     # On crée une liste vide qui va accueillir le spectre filtré
     for i in range(len(spectre)):
         a = np.abs(spectre[i])
         if a < A1 or a > A2:
