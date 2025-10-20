@@ -19,7 +19,7 @@ def tremolo(signal, sampling_rate= 44100, ft=0.5, depth=1):
     """
 
     t = np.linspace(0, len(signal)/sampling_rate, len(signal))
-    son = signal * (1 - depth * np.abs(np.sin(2*np.pi * t *ft)))
+    son = signal * (1 - depth * np.abs(np.cos(2*np.pi * t *ft)))
     return son
 
 

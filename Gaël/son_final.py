@@ -3,35 +3,30 @@ import time
 from scipy.io import wavfile
 import numpy as np
 import matplotlib.pyplot as plt
+
+from Convolution import conv_fft
 from RingModulation import ring_modulation
 from Tremolo import tremolo
+import instruments as i
+import Convolution as c
+from Seuillage import seuillage
+from Egalisateur6bandes import egalisateur
 
-fe, x = wavfile.read("sample1.wav")
+
+fe, x = wavfile.read("Série_de_Fourier_BE_Ma312_2025.wav")
 x = x.astype(np.float32)
 if x.ndim == 2:
     x = x.mean(axis=1)
 x /= (np.max(np.abs(x)) + 1e-12)
 
-tempo = 1/8
-amplitude = 1
-echantillonage = 44100
-temps = tempo / 4
-pause = np.linspace(0, temps, int(echantillonage * temps))
-temps = tempo / 2
-t = np.linspace(0, temps, int(echantillonage * temps))
+lenght_sec = 47998
 
+extrait = x[5*lenght_sec:34*lenght_sec]
 
-sol = amplitude * np.sin(2 * np.pi * t * 392)
-do =  amplitude * np.sin(2 * np.pi * t * 262)
-rediez = amplitude * np.sin(2 * np.pi * t * 311.13)
-soldiez = amplitude * np.sin(2 * np.pi * t * 415.30)
-fa = amplitude * np.sin(2 * np.pi * t * 349.23)
-re = amplitude * np.sin(2 * np.pi * t * 293.66)
-
-signal = np.block([ring_modulation(sol) + ring_modulation(fa), ring_modulation(do) + ring_modulation(re), ring_modulation(pause), ring_modulation(rediez) + ring_modulation(do)])
-signal = np.block([signal, signal, signal, tremolo(soldiez), tremolo(soldiez), tremolo(soldiez), tremolo(soldiez)])
-signal = np.block([signal, signal])
-sd.play(signal, echantillonage)
-time.sleep(len(signal) / echantillonage)
+signal = np.block([tremolo(extrait[:7*lenght_sec], 44100, 0.04, 1), ring_modulation(egalisateur(extrait[7*lenght_sec: 34*lenght_sec],0,0,0,1,1,1), 44100, 200)])
+sd.play(signal, fe)
+time.sleep(len(extrait) / fe)  # permet d'écouter un son
 sd.stop()
-sd.stop()
+
+
+

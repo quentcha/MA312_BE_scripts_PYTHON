@@ -33,19 +33,22 @@ def ring_modulation(signal, sampling_rate= 44100, fp=400.0):
     if max_val > 0:
         signal_traite /= max_val
 
-    return signal_traite.astype(dtype)
-
+    return signal_traite
+'''
 #TEST
 
-"""fe, x = wavfile.read("sample1.wav")
+fe, x = wavfile.read("Série_de_Fourier_BE_Ma312_2025.wav")
 x = x.astype(np.float32)
 if x.ndim == 2:
     x = x.mean(axis=1)
 x /= (np.max(np.abs(x)) + 1e-12)
+lenght_sec = 47998
+extrait = x[5*lenght_sec:34*lenght_sec]
 
-x_rm = ring_modulation(x, 44100, 800)
+x_rm = ring_modulation(extrait, 44100, 50)
 signal = np.block([x_rm])
 signal = np.block([signal, signal])
 sd.play(signal, fe)
 time.sleep(len(signal) / fe)  # permet d'écouter un son
-sd.stop()"""
+sd.stop()
+'''
