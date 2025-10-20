@@ -1,3 +1,11 @@
+import sounddevice as sd
+import time
+from scipy.io import wavfile
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+
 def conv_fft(signal, impulse_response):
     """
     Code utilisant la FFT pour calculer la convolution.
@@ -29,3 +37,17 @@ def conv_fft(signal, impulse_response):
     # Retourner la partie du signal qui correspond à la longueur du signal original
     # et s'assurer que le type de données est conservé.
     return y[:len(signal)].astype(dtype)
+
+#TEST
+
+"""fe, x = wavfile.read("sample1.wav")
+x = x.astype(np.float32)
+if x.ndim == 2:
+    x = x.mean(axis=1)
+x /= (np.max(np.abs(x)) + 1e-12)
+
+x_conv = conv_fft(x, x)
+
+sd.play(x_conv, fe)
+time.sleep(len(x_conv) / fe)  # permet d'écouter un son
+sd.stop()"""

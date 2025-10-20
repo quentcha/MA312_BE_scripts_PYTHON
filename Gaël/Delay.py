@@ -44,7 +44,7 @@ def delay(signal, sampling_rate, delay_time=0.5, feedback=0.5, mix=0.5):
     return output.astype(dtype)
 
 #TEST
-fe, x = wavfile.read("guitare1.wav")
+fe, x = wavfile.read("sample1.wav")
 x = x.astype(np.float32)
 if x.ndim == 2:
     x = x.mean(axis=1)

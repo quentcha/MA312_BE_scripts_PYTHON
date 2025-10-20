@@ -12,7 +12,12 @@ def pitch(data,shift,fe):##erreur va s'additionner car on arrondi et perte des h
 from scipy.io import wavfile
 import matplotlib.pyplot as plt
 
-fe, data= wavfile.read(r'C:\Users\quent\OneDrive\Desktop\IPSA\python A3\BE_MA312_Python\MA312_BE_scripts_PYTHON\Série_de_Fourier_BE_Ma312_2025.wav')
+#fe, data= wavfile.read(r'C:\Users\quent\OneDrive\Desktop\IPSA\python A3\BE_MA312_Python\MA312_BE_scripts_PYTHON\Série_de_Fourier_BE_Ma312_2025.wav')
+#data = data.astype(np.float32)
+#if data.ndim == 2 : #stéréo -> mono si besoin
+#    data = data.mean(axis =1)
+
+fe, data= wavfile.read("Série_de_Fourier_BE_Ma312_2025.wav")
 data = data.astype(np.float32)
 if data.ndim == 2 : #stéréo -> mono si besoin
     data = data.mean(axis =1)
