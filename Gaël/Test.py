@@ -5,7 +5,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from RingModulation import ring_modulation
 from Egalisateur6bandes import egalisateur
-
+from convolution import convolution
+from shift import pitch
 
 
 fe, x = wavfile.read('Série_de_Fourier_BE_Ma312_2025.wav')
@@ -19,7 +20,7 @@ x /= (np.max(np.abs(x)) + 1e-12)
 lenght_sec = 47998
 extrait = x[7*lenght_sec:34*lenght_sec]
 
-extrait = ring_modulation(egalisateur(extrait[7*lenght_sec:],0,0,0,1,1,1), 44100, 200)
+extrait = pitch(ring_modulation(egalisateur(extrait[7*lenght_sec: 34*lenght_sec],0,0,0,1,1,1), 44100, 200), -100, 44100)
 spectre = np.fft.rfft(extrait)                    # On calcule le spectre du signal avec la transformée de Fourier
 freq = np.fft.rfftfreq(len(extrait), d=1.0/fe)
 

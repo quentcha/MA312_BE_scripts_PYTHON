@@ -17,7 +17,7 @@ def y(t,freq):
     return -abs(5*t*np.sin(np.pi*t*freq))
 def g(t,freq):
     return 5*np.sin(2*np.pi*t*freq)
-fe, data= wavfile.read(r'example.wav')
+fe, data= wavfile.read('Série_de_Fourier_BE_Ma312_2025.wav')
 data = data.astype(np.float32)
 if data.ndim == 2 : #stéréo -> mono si besoin
     data = data.mean(axis =1)
