@@ -57,7 +57,7 @@ sd.play(signal, fe)
 time.sleep(len(signal) / fe)#permet au programme d’attendre la fin de la lecture du son avant de se terminer
 sd.stop()
 '''
-'''
+
 ##note
 duree=2
 fe =44100
@@ -91,7 +91,7 @@ signal=np.block([signal for i in range(10)])
 sd.play(signal, fe)
 time.sleep(len(signal) / fe)#permet au programme d’attendre la fin de la lecture du son avant de se terminer
 sd.stop()
-'''
+
 '''
 ### Bass
 duree=20

@@ -4,9 +4,6 @@ from scipy.io import wavfile
 import numpy as np
 import matplotlib.pyplot as plt
 
-
-
-
 def filtrage_amp(data, A1, A2): # Soient A1 et A2 les amplitudes des bornes
 
     fe, x = wavfile.read(data)
