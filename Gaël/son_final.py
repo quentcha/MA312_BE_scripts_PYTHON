@@ -10,7 +10,7 @@ from Tremolo import tremolo
 import instruments as i
 import Convolution as c
 from Seuillage import seuillage
-from Egalisateur6bandes import egalisateur
+from egalisateur6bandes import egalisateur
 
 
 fe, x = wavfile.read("Série_de_Fourier_BE_Ma312_2025.wav")

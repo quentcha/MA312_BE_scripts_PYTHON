@@ -7,7 +7,8 @@ def convolution(dataA, dataB):
     elif len(dataA)>len(dataB):dataB=np.block([dataB,np.zeros(len(dataA)-len(dataB))])
     dataC=dataA*dataB
     return np.fft.irfft(dataC)
-
+def f(t):
+    return np.cos(np.pi*t)
 from scipy.io import wavfile
 import matplotlib.pyplot as plt
 from instruments import note, hihat
@@ -16,8 +17,8 @@ data = data.astype(np.float32)
 if data.ndim == 2 : #stéréo -> mono si besoin
     data = data.mean(axis =1)
 data = np.block([data, np.zeros(2**(int(np.log2(len(data)))+1)-len(data))])
-
-convoluted_data=convolution(data,data)
+t=np.linspace(0,1000,500)
+convoluted_data=convolution(f(t),data)
 
 print("plotting...")
 plt.plot(np.abs(np.fft.rfft(convoluted_data)))

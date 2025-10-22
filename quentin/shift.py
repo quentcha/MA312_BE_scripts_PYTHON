@@ -58,6 +58,6 @@ def pitch(data,n_octave):#pitch shift pur
     plt.xlabel("Frequence , Hz " )
     plt.ylabel("Amplitude")
     plt.show()
-    inverse=np.fft.irfft(spectre_pitch,n=len(data))
+    inverse=np.fft.irfft(spectre_pitch)
     return inverse
 '''
