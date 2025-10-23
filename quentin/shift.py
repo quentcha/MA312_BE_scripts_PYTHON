@@ -42,7 +42,7 @@ plt.show()
 
 #play.sound(data,fe)
 #play.sound(data_pitched,fe)
-wavfile.write("example.wav", fe, data_pitched)
+#wavfile.write("example.wav", fe, data_pitched)
 '''
 def pitch(data,n_octave):#pitch shift pur
     #freq*2 pour +1 octave
