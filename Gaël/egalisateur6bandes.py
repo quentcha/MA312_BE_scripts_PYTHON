@@ -4,7 +4,10 @@ from scipy.io import wavfile
 import numpy as np
 import matplotlib.pyplot as plt
 
-"""On définit les 6 plages de fréquences auxquelles on appliquera les coefficients pris en compte dans la fonction:
+"""
+Cette fonction permet d'amplifier ou de réduire l'amplitude de fréquences ciblées sur un signal sonore.
+On définit les 6 plages de fréquences auxquelles on appliquera les coefficients pris en compte dans la fonction:
+
 Basse : 0-100 Hz
 
 Basse-médium : 101-200 Hz
@@ -13,9 +16,9 @@ Médium-grave : 201-400 Hz
 
 Médium-aigu : 401-800 Hz
 
-Aigu : 0,801-1,6 kHz
+Aigu : 0,801-5 kHz
 
-Très aigu: 1,6-5 kHz"""
+Très aigu: 5-20 kHz"""
 
 
 def egalisateur(data, k1, k2, k3, k4, k5, k6): # Soient ki, les coefficients multiplicateurs des bandes définies
@@ -38,10 +41,10 @@ def egalisateur(data, k1, k2, k3, k4, k5, k6): # Soient ki, les coefficients mul
     ma_index_max = np.searchsorted(freq, 800)
 
     a_index_min = np.searchsorted(freq, 801)       #Aigu
-    a_index_max = np.searchsorted(freq, 1600)
+    a_index_max = np.searchsorted(freq, 5000)
 
-    ta_index_min = np.searchsorted(freq, 1601)     #Très aigu
-    ta_index_max = np.searchsorted(freq, 5000)
+    ta_index_min = np.searchsorted(freq, 5000)     #Très aigu
+    ta_index_max = np.searchsorted(freq, 20000)
 
 
     # On applique les facteurs à leur plage de fréquences:
@@ -55,15 +58,17 @@ def egalisateur(data, k1, k2, k3, k4, k5, k6): # Soient ki, les coefficients mul
     spectre_filtre[a_index_min:a_index_max] = k5 * spectre_filtre[a_index_min:a_index_max]
     spectre_filtre[ta_index_min:ta_index_max] = k6 * spectre_filtre[ta_index_min:ta_index_max]
 
-    # On renvoie le plot du spectre initial et du spectre égalisé pour pouvoir les comparer:
-    #plt.xlabel("Fréquence (Hz)")
-    #plt.ylabel("Amplitude")
-    #plt.plot(freq, np.abs(spectre), "g")
-    #plt.plot(freq, np.abs(spectre_filtre), "r")
-    #plt.show()
+    # On renvoie le spectre initial et le spectre égalisé afin de les comparer:
+    plt.xlabel("Fréquence (Hz)")
+    plt.ylabel("Amplitude")
+    plt.plot(freq, np.abs(spectre), "g")
+    plt.plot(freq, np.abs(spectre_filtre), "r")
+    plt.show()
+
+
 
     # On applique la transformée inverse de Fourier pour récupérer le son égalisé:
-
+    son = np.fft.irfft(spectre_filtre)
     '''son = np.fft.irfft(spectre_filtre)
     sd.play(son, fe)
     time.sleep(len(son) / fe)  # permet d'écouter un son
@@ -73,24 +78,19 @@ def egalisateur(data, k1, k2, k3, k4, k5, k6): # Soient ki, les coefficients mul
     sd.play(x,fe)
     time.sleep(len(son) / fe)  # permet d'écouter un son
     sd.stop()'''
-    son = np.fft.irfft(spectre_filtre)
+
     return son
 
  # TEST
-
+'''
 #egalisateur("guitare1.wav", 10, 10, 1, 1, 1, 1)
 #egalisateur("Série_de_Fourier_BE_Ma312_2025.wav", 10, 10, 0.5, 0.5, 0.5, 0.5)
-'''fe, x = wavfile.read("Série_de_Fourier_BE_Ma312_2025.wav")
+fe, x = wavfile.read("20-20_000-Hz-Audio-Sweep.wav")
 x = x.astype(np.float32)
 if x.ndim == 2:
     x = x.mean(axis=1)
 x /= (np.max(np.abs(x)) + 1e-12)
 
-lenght_sec = 47998
+egalisateur(x, 1,1,1,1,2,2)
+'''
 
-extrait = x[7*lenght_sec:34*lenght_sec]
-extrait = egalisateur(extrait, 0, 0, 0, 1, 1, 1)
-
-sd.play(extrait, fe)
-time.sleep(len(extrait) / fe)  # permet d'écouter un son
-sd.stop()'''
