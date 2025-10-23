@@ -4,6 +4,7 @@ def passe_coupe_bande(fmin,fmax,data,fe):
     spectre_coupe= np.zeros(len(spectre), dtype=complex)
     freq = np.fft.rfftfreq(len(data), d=1.0/fe)
     for i in range(len(freq)):
+
         if freq[i]>fmin and freq[i]<fmax:
             spectre_coupe[i]=spectre[i]
     return np.fft.irfft(spectre_coupe)
