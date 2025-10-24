@@ -24,7 +24,7 @@ if data.ndim == 2 : #stéréo -> mono si besoin
 data = np.block([data, np.zeros(2**(int(np.log2(len(data)))+1)-len(data))])
 #play.sound(data,fe)
 data_pitched=pitch(data,500,fe)
-freq_pitched=np.fft.rfftfreq(data.size, d=1./fe)
+freq_pitched=np.fft.rfftfreq(data_pitched.size, d=1./fe)
 #play.sound(data_pitched,fe)
 print("plotting...")
 plt.plot(freq_pitched,np.abs(np.fft.rfft(data)))

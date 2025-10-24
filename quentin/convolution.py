@@ -11,13 +11,8 @@ def convolution(dataA, dataB):
 from scipy.io import wavfile
 import matplotlib.pyplot as plt
 from instruments import note, hihat
-def f(t,freq):
-    return abs(5*t*np.sin(np.pi*t*freq))
-def y(t,freq):
-    return -abs(5*t*np.sin(np.pi*t*freq))
-def g(t,freq):
-    return 5*np.sin(2*np.pi*t*freq)
-fe, data= wavfile.read('Série_de_Fourier_BE_Ma312_2025.wav')
+
+fe, data= wavfile.read('guitare1.wav')
 data = data.astype(np.float32)
 if data.ndim == 2 : #stéréo -> mono si besoin
     data = data.mean(axis =1)
@@ -27,29 +22,17 @@ duree=5
 t=np.linspace(0 , duree , fe*duree)
 
 convoluted_data=convolution(data,data)
-
+convoluted_freq=np.fft.rfftfreq(convoluted_data.size, d=1./fe)
 print("plotting...")
-print(np.abs(np.fft.rfft(convoluted_data)))
-plt.plot(np.abs(np.fft.rfft(convoluted_data)))
-plt.plot(np.abs(np.fft.rfft(data)))
-plt.plot(np.abs(np.fft.rfft(g(t,1000))))
+plt.plot(convoluted_freq,np.abs(np.fft.rfft(convoluted_data)))
+plt.plot(convoluted_freq,np.abs(np.fft.rfft(data)))
 plt.xlabel("Frequence , Hz " )
 plt.ylabel("Amplitude")
 plt.show()
 
-#plt.plot(convoluted_data)
-#plt.show()
-#plt.plot(f(t,261))
-#plt.show()
-#plt.plot(y(t,261))
-#plt.show()
-
-#play.sound(f(t,261),fe)
-#play.sound(y(t,261),fe)
-
 print("plotting")
 plt.plot(convoluted_data)
 plt.show()
-print("playing")
+#print("playing")
 #play.sound(g(t,1000),fe)
-play.sound(convoluted_data,fe)
+#play.sound(convoluted_data,fe)
