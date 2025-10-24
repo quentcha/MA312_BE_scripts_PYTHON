@@ -10,7 +10,6 @@ def convolution(dataA, dataB):
 
 from scipy.io import wavfile
 import matplotlib.pyplot as plt
-from instruments import note, hihat
 
 fe, data= wavfile.read('guitare1.wav')
 data = data.astype(np.float32)
@@ -33,6 +32,6 @@ plt.show()
 print("plotting")
 plt.plot(convoluted_data)
 plt.show()
-#print("playing")
-#play.sound(g(t,1000),fe)
-#play.sound(convoluted_data,fe)
+print("playing")
+play.sound(data,fe)
+play.sound(convoluted_data,fe)
