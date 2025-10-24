@@ -45,7 +45,7 @@ def analyse(data):
 print("INITIALISATION CAMERA")
 video = cv2.VideoCapture(0)
 nbr_capteurs = 50
-longueur_captation=500
+longueur_captation=250
 compteur = 0
 res=0
 
