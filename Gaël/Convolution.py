@@ -12,9 +12,9 @@ def convolution(dataA, dataB):
 
 
 def f(t,freq):
-    return 5*np.sin(np.pi*t*freq)
+    return 0.8*np.sin(2*np.pi*t*freq)
 def g(t,freq1,freq2):
-    return 5*np.sin(np.pi*t*freq1)+5*np.sin(np.pi*t*freq2)
+    return 0.8*np.sin(2*np.pi*t*freq1)+0.8*np.sin(2*np.pi*t*freq2)
 
 fe, data= wavfile.read('Série_de_Fourier_BE_Ma312_2025.wav')
 data = data.astype(np.float32)
@@ -26,13 +26,13 @@ fe=30
 duree=2
 t=np.linspace(0 , duree , fe*duree)
 
-convoluted_data=convolution(f(t,1000),g(t,1000,2300))
+convoluted_data=convolution(f(t,100),g(t,100,200))
 
 print("plotting...")
 freq = np.fft.rfftfreq(len(f(t,100)), d=1.0/fe)
 plt.stem(freq, np.abs(np.fft.rfft(convoluted_data)), linefmt='r-', markerfmt='ro', basefmt='r-')
-plt.stem(freq, np.abs(np.fft.rfft(f(t,1000))), linefmt='g-', markerfmt='go', basefmt='g-')
-plt.stem(freq, np.abs(np.fft.rfft(f(t,1200))), linefmt='b-', markerfmt='bo', basefmt='b-')
+plt.stem(freq, np.abs(np.fft.rfft(f(t,100))), linefmt='g-', markerfmt='go', basefmt='g-')
+plt.stem(freq, np.abs(np.fft.rfft(f(t,120))), linefmt='b-', markerfmt='bo', basefmt='b-')
 plt.xlabel("Frequence , Hz ")
 plt.ylabel("Amplitude")
 plt.show()
