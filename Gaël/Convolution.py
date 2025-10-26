@@ -10,14 +10,11 @@ def convolution(dataA, dataB):
     dataC=dataA*dataB
     return np.fft.irfft(dataC)
 
-'''
+
 from instruments import note, hihat
 def f(t,freq):
-    return abs(5*t*np.sin(np.pi*t*freq))
-def y(t,freq):
-    return -abs(5*t*np.sin(np.pi*t*freq))
-def g(t,freq):
-    return 5*np.sin(2*np.pi*t*freq)
+    return 5*np.sin(np.pi*t*freq)
+
 fe, data= wavfile.read('Série_de_Fourier_BE_Ma312_2025.wav')
 data = data.astype(np.float32)
 if data.ndim == 2 : #stéréo -> mono si besoin
@@ -27,30 +24,21 @@ data = np.block([data, np.zeros(2**(int(np.log2(len(data)))+1)-len(data))])
 duree=5
 t=np.linspace(0 , duree , fe*duree)
 
-convoluted_data=convolution(data,data)
+convoluted_data=convolution(f(t,1000),f(t,1200))
 
 print("plotting...")
-print(np.abs(np.fft.rfft(convoluted_data)))
-plt.plot(np.abs(np.fft.rfft(convoluted_data)))
-plt.plot(np.abs(np.fft.rfft(data)))
-plt.plot(np.abs(np.fft.rfft(g(t,1000))))
+fe=30
+freq = np.fft.rfftfreq(len(f(t,100)), d=1.0/fe)
+plt.stem(freq, np.abs(np.fft.rfft(convoluted_data)), linefmt='r-', markerfmt='ro', basefmt='r-')
+plt.stem(freq, np.abs(np.fft.rfft(f(t,1000))), linefmt='g-', markerfmt='go', basefmt='g-')
+plt.stem(freq, np.abs(np.fft.rfft(f(t,1200))), linefmt='b-', markerfmt='bo', basefmt='b-')
 plt.xlabel("Frequence , Hz " )
 plt.ylabel("Amplitude")
 plt.show()
-
-#plt.plot(convoluted_data)
-#plt.show()
-#plt.plot(f(t,261))
-#plt.show()
-#plt.plot(y(t,261))
-#plt.show()
-
-#play.sound(f(t,261),fe)
-#play.sound(y(t,261),fe)
 
 print("plotting")
 plt.plot(convoluted_data)
 plt.show()
 print("playing")
-#play.sound(g(t,1000),fe)
-play.sound(convoluted_data,fe)'''
+play.sound(f(t,1000),fe)
+play.sound(convoluted_data,fe)

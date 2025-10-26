@@ -1,13 +1,15 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+
 def autocorrelation(data):
     n=len(data)
     correlated_data=np.zeros(n)
     for t in range(n):
-        #print(f"AUTOCORRELATION : {round(t/n,2)*100} %")
         correlated_data[t]=sum(np.conj(data[:n-t])*data[t:])
     return correlated_data
+
+
 def passe_coupe_bande(fmin,fmax,data,freq):
     spectre = np.fft.rfft(data)
     spectre_coupe= np.zeros(len(spectre), dtype=complex)
@@ -15,6 +17,7 @@ def passe_coupe_bande(fmin,fmax,data,freq):
         if freq[i]>fmin and freq[i]<fmax:
             spectre_coupe[i]=spectre[i]
     return np.fft.irfft(spectre_coupe)
+
 def analyse(data):
     data = np.block([data, np.zeros(2**(int(np.log2(len(data)))+1)-len(data))]) #optimisation pour fft
 
@@ -24,12 +27,15 @@ def analyse(data):
     freq = np.fft.rfftfreq(len(data), d=1.0/fe)
     data=passe_coupe_bande(mini/60,maxi/60,data,freq)#filtrage en fonction de la plage de bpm
 
-    print("AUTOCORRELATION")
+    print("AUTO-CORRELATION")
     data=autocorrelation(data)
 
-    print("TRANSFORMATION DE FOURIER ------------------------------------------------------------------------")
+    print("TRANSFORMATION DE FOURIER")
     spectre=np.fft.rfft(data)
+    freq=np.fft.rfftfreq(data.size, d=1./30)
+
     max = np.argmax(abs(spectre))# Trouve l'indice du pic d'intensité
+    max=freq[max]*60
 
     top=[]
     copySpectre=np.copy(spectre)
@@ -38,7 +44,6 @@ def analyse(data):
         id=np.argmax(abs(copySpectre))
         top.append(freq[id]*60)
         copySpectre[id]=0
-
     print(f"TOP RESULTAT : {top}")
     print(f"PICS RESULTAT : {max}")
     plt.stem(freq, abs(spectre), linefmt='b-', markerfmt='bo', basefmt='r-')
@@ -46,67 +51,30 @@ def analyse(data):
     plt.ylabel("Intensité")
     plt.show()
 
-    return top
-
 #(°,°,°) -> (blue, green, red)
 print("CLASSIFICATION HAARCASCADE VISAGE")
 facecascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 print("INITIALISATION CAMERA")
 video = cv2.VideoCapture(0)
 print("INITIALISATION VARIABLES")
-nbr_capteurs = 10
 longueur_captation=500
 compteur = 0
-res=0
 
 FaceData=np.zeros(longueur_captation)
-ConData=np.zeros(longueur_captation)
-
 while True:
     check, frame = video.read()
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     faces = facecascade.detectMultiScale(gray, 1.3, 5)
+
     for (x, y, w, h) in faces:
         if h > 0 and w > 0:
-            cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)
-
-            FaceX=np.linspace(x + (w//4), x + (3*w//4), nbr_capteurs)
-            FacePixel=np.zeros(nbr_capteurs)
-            for pos in range(len(FaceX)):
-                posx=int(FaceX[pos])
-                FacePixel_value=frame[y + (h//8), posx][1]#on récupère l'intensité du canal vert car plus efficace pour détecter les vaisseaux sanguins
-                cv2.rectangle(frame, (posx-2, y + (h//8)), (posx, y + (h//8)+2), (0, 0, 255), 2)
-                FacePixel[pos]=FacePixel_value
-            FaceData[compteur]=abs(FaceData[compteur-1]-np.mean(FacePixel))
-
-            ConPixel_value=frame[1, 1][1]
-            cv2.rectangle(frame, (0, 0), (2, 2), (0, 0, 255), 2)
-            ConData[compteur]=abs(ConData[compteur-1]-ConPixel_value)
-
-            print(f"COLLECTE D'IMAGE :{round(compteur/longueur_captation,2)*100} % | RESULTAT PRECEDENT : {res} BPM")
+            cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
+            FaceData[compteur]=frame[y+11, x + (3*w//4)][1]
+            cv2.rectangle(frame, (x+ (3*w//4) -1, y+10), (x + (3*w//4) - 1 , y + 12), (255, 0, 0), 2)
             compteur+=1
 
-    if len(faces)==0:
-        compteur=0
-        FaceData=np.zeros(longueur_captation)
-        ConData=np.zeros(longueur_captation)
-        print("CAMERA NE DETECTE RIEN")#pour éviter les hallucinations et avoir un dataset fiable
-
     if (compteur)==longueur_captation:
-        FaceData /= (np.max(np.abs(FaceData)) + 1*10**(-12))#normalisation
-        ConData /= (np.max(np.abs(FaceData)) + 1*10**(-12))#normalisation
-        topFace=analyse(FaceData)
-        print(f"PIQUES RESULTAT : {topFace}")
-        topControl=analyse(ConData)
-        print(f"PIQUES RESULTAT CONTROLE: {topControl}")
-        res=0
-        for val in topFace:
-            if val not in topControl and 35<val<180:
-                res=val
-                break
-        if res!=0 : print(f"RESULTAT : {res} BPM")
-        else: print(f"TROP DE BRUIT LUMINEUX POUR CAPTER LE BPM, ESSAYEZ DE CHANGER D'ENVIRONNEMENT")
-
+        res=analyse(FaceData)
         FaceData=np.zeros(longueur_captation)
         ConData=np.zeros(longueur_captation)
         compteur=0
@@ -118,4 +86,3 @@ while True:
 
 video.release()
 cv2.destroyAllWindows()
-
