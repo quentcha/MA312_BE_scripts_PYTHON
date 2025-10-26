@@ -75,11 +75,11 @@ while True:
                 FacePixel_value=frame[y + (h//8), posx][1]#on récupère l'intensité du canal vert car plus efficace pour détecter les vaisseaux sanguins
                 cv2.rectangle(frame, (posx-2, y + (h//8)), (posx, y + (h//8)+2), (0, 0, 255), 2)
                 FacePixel[pos]=FacePixel_value
-            FaceData[compteur]=abs(FaceData[compteur-1]-np.mean(FacePixel))
+            FaceData[compteur]=np.mean(FacePixel)
 
             ConPixel_value=frame[1, 1][1]
             cv2.rectangle(frame, (0, 0), (2, 2), (0, 0, 255), 2)
-            ConData[compteur]=abs(ConData[compteur-1]-ConPixel_value)
+            ConData[compteur]=ConPixel_value
 
             print(f"COLLECTE D'IMAGE :{round(compteur/longueur_captation,2)*100} % | RESULTAT PRECEDENT : {res}")
             compteur+=1
@@ -98,7 +98,7 @@ while True:
         topControl=analyse(ConData)
         print(f"PICS RESULTAT CONTROLE: {topControl}")
 
-        res="TROP DE BRUIT LUMINEUX POUR CAPTER LE BPM, ESSAYEZ DE CHANGER D'ENVIRONNEMENT"
+        res="TROP DE BRUIT POUR CAPTER LE BPM, ESSAYEZ DE CHANGER D'ENVIRONNEMENT"
         for val in topFace:
             if val not in topControl and 35<val<180:
                 res=f"{val} BPM"

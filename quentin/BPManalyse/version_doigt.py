@@ -57,7 +57,7 @@ while True:
     for x in range(len(Xline)):
         FingerPixel[x]=frame[250, int(Xline[x])][1]
         cv2.rectangle(frame, (int(Xline[x])-1,249), (int(Xline[x])+1, 251), (0, 0, 255), 2)
-    FingerData[compteur]=abs(FingerData[compteur-1]-np.mean(FingerPixel))
+    FingerData[compteur]=np.mean(FingerPixel)
 
     print(f"COLLECTE D'IMAGE :{round(compteur/longueur_captation,2)*100} % | RESULTAT PRECEDENT : {res} BPM")
     compteur+=1
