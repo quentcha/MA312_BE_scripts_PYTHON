@@ -2,12 +2,11 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 def autocorrelation(data):
-    n=len(data)
-    correlated_data=np.zeros(n)
-    for t in range(n):
-        #print(f"AUTOCORRELATION : {round(t/n,2)*100} %")
-        correlated_data[t]=sum(np.conj(data[:n-t])*data[t:])
-    return correlated_data
+    dataA=np.fft.rfft(data)
+    dataB=np.fft.rfft(np.conj(data))
+    correlated_data=dataA*dataB
+    return np.fft.irfft(correlated_data)
+
 def passe_coupe_bande(fmin,fmax,data,freq):
     spectre = np.fft.rfft(data)
     spectre_coupe= np.zeros(len(spectre), dtype=complex)
@@ -33,14 +32,12 @@ def analyse(data):
 
     top=[]
     copySpectre=np.copy(spectre)
-    for i in range(10):
+    for i in range(top_n):
         copySpectre=np.copy(copySpectre)
         id=np.argmax(abs(copySpectre))
         top.append(freq[id]*60)
         copySpectre[id]=0
 
-    print(f"TOP RESULTAT : {top}")
-    print(f"PICS RESULTAT : {max}")
     plt.stem(freq, abs(spectre), linefmt='b-', markerfmt='bo', basefmt='r-')
     plt.xlabel("Frequence , Hz ")
     plt.ylabel("Intensité")
@@ -58,6 +55,7 @@ nbr_capteurs = 10
 longueur_captation=500
 compteur = 0
 res=0
+top_n=100
 
 FaceData=np.zeros(longueur_captation)
 ConData=np.zeros(longueur_captation)
@@ -83,7 +81,7 @@ while True:
             cv2.rectangle(frame, (0, 0), (2, 2), (0, 0, 255), 2)
             ConData[compteur]=abs(ConData[compteur-1]-ConPixel_value)
 
-            print(f"COLLECTE D'IMAGE :{round(compteur/longueur_captation,2)*100} % | RESULTAT PRECEDENT : {res} BPM")
+            print(f"COLLECTE D'IMAGE :{round(compteur/longueur_captation,2)*100} % | RESULTAT PRECEDENT : {res}")
             compteur+=1
 
     if len(faces)==0:
@@ -96,16 +94,15 @@ while True:
         FaceData /= (np.max(np.abs(FaceData)) + 1*10**(-12))#normalisation
         ConData /= (np.max(np.abs(FaceData)) + 1*10**(-12))#normalisation
         topFace=analyse(FaceData)
-        print(f"PIQUES RESULTAT : {topFace}")
+        print(f"PICS RESULTAT : {topFace}")
         topControl=analyse(ConData)
-        print(f"PIQUES RESULTAT CONTROLE: {topControl}")
-        res=0
+        print(f"PICS RESULTAT CONTROLE: {topControl}")
+
+        res="TROP DE BRUIT LUMINEUX POUR CAPTER LE BPM, ESSAYEZ DE CHANGER D'ENVIRONNEMENT"
         for val in topFace:
             if val not in topControl and 35<val<180:
-                res=val
+                res=f"{val} BPM"
                 break
-        if res!=0 : print(f"RESULTAT : {res} BPM")
-        else: print(f"TROP DE BRUIT LUMINEUX POUR CAPTER LE BPM, ESSAYEZ DE CHANGER D'ENVIRONNEMENT")
 
         FaceData=np.zeros(longueur_captation)
         ConData=np.zeros(longueur_captation)

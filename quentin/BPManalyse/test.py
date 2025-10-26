@@ -3,12 +3,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def autocorrelation(data):
-    n=len(data)
-    correlated_data=np.zeros(n)
-    for t in range(n):
-        correlated_data[t]=sum(np.conj(data[:n-t])*data[t:])
-    return correlated_data
-
+    dataA=np.fft.rfft(data)
+    dataB=np.fft.rfft(np.conj(data))
+    correlated_data=dataA*dataB
+    return np.fft.irfft(correlated_data)
 
 def passe_coupe_bande(fmin,fmax,data,freq):
     spectre = np.fft.rfft(data)
