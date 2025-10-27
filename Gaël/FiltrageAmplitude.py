@@ -23,9 +23,9 @@ def filtrage_amp(data, A1, A2): # Soient A1 et A2 les amplitudes des bornes
     for i in range(len(spectre)):
         a = np.abs(spectre[i])
         if a < A1 or a > A2:
-            spectre_filtre.append(0)
+            spectre_filtre[i] = 0
         else:
-            spectre_filtre.append(a)
+            spectre_filtre[i] = a
 
 
 
@@ -57,4 +57,4 @@ def filtrage_amp(data, A1, A2): # Soient A1 et A2 les amplitudes des bornes
  # TEST
 
 #filtrage_amp("guitare1.wav", 2000, 8000)
-filtrage_amp("Série_de_Fourier_BE_Ma312_2025.wav", 10000, 15000)
+#filtrage_amp("Série_de_Fourier_BE_Ma312_2025.wav", 10000, 15000)

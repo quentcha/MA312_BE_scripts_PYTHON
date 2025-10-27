@@ -12,7 +12,7 @@ def tremolo(signal, sampling_rate= 44100, ft=0.5, depth=1):
     strictement positive (car une amplitude ne peut pas être négative) à l'amplitude du signal d'entrée.
     Cela aura pour effet de diminuer puis rétablir l'instensité du son de façon périodique.
 
-    :param signal: Le signal audio d'entrée
+    :param signal: Le signal audio d'entrée en array
     :param sampling_rate: La fréquence d'échantillonnage (Hz)
     :param ft (fréquence du trémolo): Détermine la périodicité de l'effet, généralement on prend des fréquences très basses afin que l'effet soit prononcé ( entre 0.5 et 10 Hz)
     :param depth: détermine l'amplitude de l'effet
