@@ -37,10 +37,12 @@ def filtrage_amp(data, A1, A2): # Soient A1 et A2 les amplitudes des bornes
     plt.plot(freq, np.abs(spectre_filtre), "g")
     plt.grid(True)
     plt.show()
+
+    son = np.fft.irfft(spectre_filtre)
     '''
     # On applique la transformée inverse de Fourier pour récupérer le son égalisé:
 
-    son = np.fft.irfft(spectre_filtre)
+  
     sd.play(son, fe)
     time.sleep(len(son) / fe)  # permet d'écouter un son
     sd.stop()
@@ -50,6 +52,7 @@ def filtrage_amp(data, A1, A2): # Soient A1 et A2 les amplitudes des bornes
     time.sleep(len(son) / fe)  # permet d'écouter un son
     sd.stop()
     '''
+    return son
 
  # TEST
 
