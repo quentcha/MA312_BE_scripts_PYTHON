@@ -25,7 +25,10 @@
   "keyToString": {
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "Python.Egalisateur6bandes.executor": "Run",
+    "Python.FiltrageAmplitude.executor": "Run",
+    "Python.RingModulation.executor": "Run",
     "Python.Seuillage.executor": "Run",
+    "Python.Tremolo.executor": "Run",
     "Python.coupeBande.executor": "Run",
     "Python.son_final.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -57,7 +60,8 @@
       <workItem from="1761059277865" duration="1887000" />
       <workItem from="1761134873163" duration="636000" />
       <workItem from="1761140865813" duration="2071000" />
-      <workItem from="1761233832939" duration="5953000" />
+      <workItem from="1761233832939" duration="8123000" />
+      <workItem from="1761378182644" duration="10524000" />
     </task>
     <servers />
   </component>
@@ -65,9 +69,12 @@
     <option name="version" value="3" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/MA312_BE_scripts_PYTHON$son_final.coverage" NAME="son_final Coverage Results" MODIFIED="1761060457790" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Gaël" />
     <SUITE FILE_PATH="coverage/MA312_BE_scripts_PYTHON$Seuillage.coverage" NAME="Seuillage Coverage Results" MODIFIED="1761247422273" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Gaël" />
+    <SUITE FILE_PATH="coverage/MA312_BE_scripts_PYTHON$son_final.coverage" NAME="son_final Coverage Results" MODIFIED="1761382513106" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Gaël" />
+    <SUITE FILE_PATH="coverage/MA312_BE_scripts_PYTHON$FiltrageAmplitude.coverage" NAME="FiltrageAmplitude Coverage Results" MODIFIED="1761250378989" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Gaël" />
+    <SUITE FILE_PATH="coverage/MA312_BE_scripts_PYTHON$Tremolo.coverage" NAME="Tremolo Coverage Results" MODIFIED="1761387119822" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Gaël" />
     <SUITE FILE_PATH="coverage/MA312_BE_scripts_PYTHON$Egalisateur6bandes.coverage" NAME="Egalisateur6bandes Coverage Results" MODIFIED="1761237038423" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Gaël" />
+    <SUITE FILE_PATH="coverage/MA312_BE_scripts_PYTHON$RingModulation.coverage" NAME="RingModulation Coverage Results" MODIFIED="1761402602906" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Gaël" />
     <SUITE FILE_PATH="coverage/MA312_BE_scripts_PYTHON$coupeBande.coverage" NAME="coupeBande Coverage Results" MODIFIED="1761141167102" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/quentin" />
   </component>
 </project>

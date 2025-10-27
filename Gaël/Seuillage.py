@@ -53,6 +53,7 @@ def seuillage(data, fe,  thau, k): # Soit thau le seuil et k le coefficient de r
 
 
  # TEST
+
 fe, x = wavfile.read("Série_de_Fourier_BE_Ma312_2025.wav")
 x = x.astype(np.float32)
 if x.ndim == 2:
