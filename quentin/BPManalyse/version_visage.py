@@ -32,16 +32,12 @@ def analyse(data):
 
     top=[]
     copySpectre=np.copy(spectre)
-    for i in range(top_n):
-        copySpectre=np.copy(copySpectre)
-        id=np.argmax(abs(copySpectre))
+    id=np.argmax(abs(copySpectre))
+    while abs(copySpectre[id])>1*10**(-10):
         top.append(freq[id]*60)
         copySpectre[id]=0
-
-    plt.stem(freq, abs(spectre), linefmt='b-', markerfmt='bo', basefmt='r-')
-    plt.xlabel("Frequence , Hz ")
-    plt.ylabel("Intensité")
-    plt.show()
+        copySpectre=np.copy(copySpectre)
+        id=np.argmax(abs(copySpectre))
 
     return top
 
@@ -55,7 +51,7 @@ nbr_capteurs = 10
 longueur_captation=500
 compteur = 0
 res=0
-top_n=100
+top_n=200
 
 FaceData=np.zeros(longueur_captation)
 ConData=np.zeros(longueur_captation)
@@ -92,7 +88,7 @@ while True:
 
     if (compteur)==longueur_captation:
         FaceData /= (np.max(np.abs(FaceData)) + 1*10**(-12))#normalisation
-        ConData /= (np.max(np.abs(FaceData)) + 1*10**(-12))#normalisation
+        ConData /= (np.max(np.abs(ConData)) + 1*10**(-12))#normalisation
         topFace=analyse(FaceData)
         print(f"PICS RESULTAT : {topFace}")
         topControl=analyse(ConData)
