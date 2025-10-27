@@ -6,12 +6,21 @@ def autocorrelation(data):
     dataB=np.fft.rfft(np.conj(data))
     correlated_data=dataA*dataB
     return np.fft.irfft(correlated_data)
-def passe_coupe_bande(fmin,fmax,data,freq):
+def passe_bande(fmin,fmax,data,freq):
     spectre = np.fft.rfft(data)
     spectre_coupe= np.zeros(len(spectre), dtype=complex)
     for i in range(len(freq)):
         if freq[i]>fmin and freq[i]<fmax:
             spectre_coupe[i]=spectre[i]
+    return np.fft.irfft(spectre_coupe)
+def coupe_bande(f,data,freq):
+    spectre = np.fft.rfft(data)
+    spectre_coupe= np.copy(spectre)
+    n=1
+    for i in range(len(freq)):
+        if freq[i]==f*n:
+            n+=1
+            spectre_coupe[i]=0
     return np.fft.irfft(spectre_coupe)
 def analyse(data):
     data = np.block([data, np.zeros(2**(int(np.log2(len(data)))+1)-len(data))]) #optimisation pour fft
@@ -29,15 +38,7 @@ def analyse(data):
     spectre=np.fft.rfft(data)
     max = np.argmax(abs(spectre))# Trouve l'indice du pic d'intensité
 
-    top=[]
-    copySpectre=np.copy(spectre)
-    for i in range(10):
-        copySpectre=np.copy(copySpectre)
-        id=np.argmax(abs(copySpectre))
-        top.append(freq[id]*60)
-        copySpectre[id]=0
-
-    return top,data
+    return max*60#conversion en BPM
 
 #(°,°,°) -> (blue, green, red)
 print("INITIALISATION CAMERA")
@@ -64,10 +65,9 @@ while True:
 
     if (compteur)==longueur_captation:
         FingerData /= (np.max(np.abs(FingerData)) + 1*10**(-12))#normalisation
-        topFinger,dataFinger=analyse(FingerData)
-        print(f"PIQUES RESULTAT : {topFinger}")
-        res=topFinger[0]
-        print(f"RESULTAT : {res} BPM")
+        maxFinger=analyse(FingerData)
+        res=f"{maxFinger} BPM"
+        print(f"RESULTAT : {res}")
 
         FingerData=np.zeros(longueur_captation)
         compteur=0
