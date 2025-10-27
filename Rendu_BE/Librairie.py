@@ -218,23 +218,6 @@ def ring_modulation(signal, sampling_rate= 44100, fp=400.0):
 
     return signal_traite
 
-def passe_bande(fmin,fmax,data,freq):
-    """Cette fonction va supprimer sur notre bande de fréquence les fréquences se trouvant en dehors de fmin et fmax"""
-    spectre = np.fft.rfft(data)
-    spectre_coupe= np.zeros(len(spectre), dtype=complex) #L'array filtré contient initialement que des zeros
-    for i in range(len(freq)):
-        if freq[i]>fmin and freq[i]<fmax: #Si notre fréquence se trouve dans l'intervalle désiré alors on l'ajoute à l'array filtré
-            spectre_coupe[i]=spectre[i]
-    return np.fft.irfft(spectre_coupe)
-
-def coupe_bande(fmin,fmax,data,freq):
-    spectre = np.fft.rfft(data)
-    spectre_coupe= np.copy(spectre)
-    for i in range(len(freq)):
-        if freq[i]>=fmin and freq[i]<=fmax:
-            spectre_coupe[i]=0
-    return np.fft.irfft(spectre_coupe)
-
 def frequency_shift(data,shift,fe):##erreur va s'additionner car on arrondi et perte des hautes fréquences
     """Ce code décale la fréquence de la fréquence shift"""
     spectre = np.fft.rfft(data)
