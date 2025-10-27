@@ -80,12 +80,23 @@
       <workItem from="1761378182644" duration="10524000" />
       <workItem from="1761554035821" duration="1273000" />
       <workItem from="1761574478917" duration="74000" />
-      <workItem from="1761574604285" duration="7885000" />
+      <workItem from="1761574604285" duration="8833000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Rendu_BE/Librairie.py</url>
+          <line>173</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/MA312_BE_scripts_PYTHON$Seuillage.coverage" NAME="Seuillage Coverage Results" MODIFIED="1761247422273" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Gaël" />

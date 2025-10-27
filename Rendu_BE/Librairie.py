@@ -129,6 +129,12 @@ def seuillage(data, fe, thau, k):  # Soit thau le seuil et k le coefficient de r
     '''
     Cette fonction a pour but de multiplier par un coefficient k (inférieur ou égal à 1) les amplitudes inférieures à thau. Ce procédé vise
     à diminuer les bruits de fond. Elle prend en argument l'array du fichier sonore.
+
+    :param data: Le signal audio d'entrée en array
+    :param fe: Le taux d'échantillonnage (Hz)
+    :param thau: Amplitude seuil
+    :param k: Le coefficient qu'on appliquera aux amplitudes
+    :return: Signal filtré
     '''
 
     spectre = np.fft.rfft(data)  # On calcule le spectre du signal avec la transformée de Fourier
@@ -176,6 +182,7 @@ def tremolo(signal, sampling_rate= 44100, ft=0.5, depth=1):
     :param sampling_rate: La fréquence d'échantillonnage (Hz)
     :param ft (fréquence du trémolo): Détermine la périodicité de l'effet, généralement on prend des fréquences très basses afin que l'effet soit prononcé ( entre 0.5 et 10 Hz)
     :param depth: détermine l'amplitude de l'effet
+    :return: Le signal avec l'effet
     """
 
     t = np.linspace(0, len(signal)/sampling_rate, len(signal))
