@@ -220,13 +220,23 @@ def passe_bande(fmin,fmax,data,freq):
             spectre_coupe[i]=spectre[i]
     return np.fft.irfft(spectre_coupe)
 
-def pitch(data,shift,fe):##erreur va s'additionner car on arrondi et perte des hautes fréquences
+def coupe_bande(fmin,fmax,data,freq):
+    spectre = np.fft.rfft(data)
+    spectre_coupe= np.copy(spectre)
+    for i in range(len(freq)):
+        if freq[i]>=fmin and freq[i]<=fmax:
+            spectre_coupe[i]=0
+    return np.fft.irfft(spectre_coupe)
+
+def frequency_shift(data,shift,fe):##erreur va s'additionner car on arrondi et perte des hautes fréquences
     """Ce code décale la fréquence de la fréquence shift"""
     spectre = np.fft.rfft(data)
     freq=np.fft.rfftfreq(data.size, d=1./fe)
     pas=freq[1]-freq[0]
-    if shift>0: spectre = np.block([np.zeros(int(abs(shift)/pas)),spectre])
-    elif shift<0: spectre = spectre[int(abs(shift)/pas):]
+    if shift>0:
+        spectre = np.block([np.zeros(int(abs(shift)/pas)),spectre])
+    elif shift<0:
+        spectre = spectre[int(abs(shift)/pas):]
     return np.fft.irfft(spectre,n=len(data))
 
 
