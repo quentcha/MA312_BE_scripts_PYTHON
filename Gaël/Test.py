@@ -5,10 +5,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from RingModulation import ring_modulation
 from Egalisateur6bandes import egalisateur
-from convolution import convolution
 from shift import pitch
 
-
+"""
 fe, x = wavfile.read('Série_de_Fourier_BE_Ma312_2025.wav')
 x = x.astype(np.float32)
 if x.ndim == 2:
@@ -32,3 +31,6 @@ plt.show()
 sd.play(extrait, fe)
 time.sleep(len(extrait) / fe)  # permet d'écouter un son
 sd.stop()
+"""
+
+help(wavfile.write)

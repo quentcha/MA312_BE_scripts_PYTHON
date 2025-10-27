@@ -7,7 +7,7 @@ import Librairie as lb
 
 #%% TEST Egalisateur à 6 bandes
 
-fe, x = wavfile.read("20-20_000-Hz-Audio-Sweep.wav")
+fe, x = wavfile.read("Data\20-20_000-Hz-Audio-Sweep.wav")
 x = x.astype(np.float32)                                #On importe notre son test
 if x.ndim == 2:
     x = x.mean(axis=1)
@@ -16,12 +16,12 @@ x /= (np.max(np.abs(x)) + 1e-12)
 lb.egalisateur(x, 1,1,1,1,2,2)  #On l'égalise pour faire ressortir les fréquences aigues (> 800 Hz)
 
 #%% TEST Filtrage ampliude
-lb.filtrage_amp("guitare1.wav", 2000, 8000)     #On garde sur le son de guitare les amplitudes entre 2000 et 8000
-lb.filtrage_amp("Série_de_Fourier_BE_Ma312_2025.wav", 10000, 15000) #On garde sur le son des séries de Fourier uniquement les amplitudes entre 10000 et 15000
+lb.filtrage_amp("Data\guitare1.wav", 2000, 8000)     #On garde sur le son de guitare les amplitudes entre 2000 et 8000
+lb.filtrage_amp("Data\Série_de_Fourier_BE_Ma312_2025.wav", 10000, 15000) #On garde sur le son des séries de Fourier uniquement les amplitudes entre 10000 et 15000
 
 #%% TEST Seuillage
 
-fe, x = wavfile.read("Série_de_Fourier_BE_Ma312_2025.wav")
+fe, x = wavfile.read("Data\Série_de_Fourier_BE_Ma312_2025.wav")
 x = x.astype(np.float32)
 if x.ndim == 2:
     x = x.mean(axis=1)
@@ -58,7 +58,7 @@ sd.stop()
 
 #%% TEST Ring Modulation
 
-fe, x = wavfile.read("Série_de_Fourier_BE_Ma312_2025.wav")
+fe, x = wavfile.read("Data\Série_de_Fourier_BE_Ma312_2025.wav")
 x = x.astype(np.float32)
 if x.ndim == 2:
     x = x.mean(axis=1)
@@ -104,13 +104,13 @@ plt.show()
 sd.play(x_rm, sampling_rate)
 time.sleep(len(x_rm) / sampling_rate)  # permet d'écouter un son
 sd.stop()
-
 #%% TEST Passe Bande
-fe, data= wavfile.read('20-20_000-Hz-Audio-Sweep.wav')
+fe, data= wavfile.read('Data\20-20_000-Hz-Audio-Sweep.wav')
 data = data.astype(np.float32)
 if data.ndim == 2 : #stéréo -> mono si besoin
     data = data.mean(axis =1)
 data = np.block([data, np.zeros(2**(int(np.log2(len(data)))+1)-len(data))])
+data /= (np.max(np.abs(data)) + 1*10**(-12))#normalisation
 freq = np.fft.rfftfreq(len(data), d=1.0/fe)
 
 fmin,fmax=500,15000
@@ -119,24 +119,56 @@ plt.plot(freq,np.abs(np.fft.rfft(lb.passe_bande(fmin,fmax,data,freq))))
 plt.xlabel("Frequence , Hz ")
 plt.ylabel("Amplitude")
 plt.show()
-
 #%% TEST Frequency shift
-fe, data= wavfile.read("Série_de_Fourier_BE_Ma312_2025.wav")
+fe, data= wavfile.read("Data\Série_de_Fourier_BE_Ma312_2025.wav")
 data = data.astype(np.float32)
 if data.ndim == 2 : #stéréo -> mono si besoin
     data = data.mean(axis =1)
 data = np.block([data, np.zeros(2**(int(np.log2(len(data)))+1)-len(data))])
 #play.sound(data,fe)
-data_pitched=lb.pitch(data,500,fe)
-freq_pitched=np.fft.rfftfreq(data_pitched.size, d=1./fe)
+data_shifted=lb.frequency_shift(data,500,fe)
+freq_shifted=np.fft.rfftfreq(data_shifted.size, d=1./fe)
 #play.sound(data_pitched,fe)
 print("plotting...")
-plt.plot(freq_pitched,np.abs(np.fft.rfft(data)))
-plt.plot(freq_pitched,np.abs(np.fft.rfft(data_pitched)))
+plt.plot(freq_shifted,np.abs(np.fft.rfft(data)))
+plt.plot(freq_shifted,np.abs(np.fft.rfft(data_shifted)))
 
 plt.xlabel("Frequence , Hz " )
 plt.ylabel("Amplitude")
 plt.show()
 
-plt.plot(data_pitched)
+plt.plot(data_shifted)
 plt.show()
+#%% TEST Coupe Bande
+fe, data= wavfile.read('Data\20-20_000-Hz-Audio-Sweep.wav')
+data = data.astype(np.float32)
+if data.ndim == 2 : #stéréo -> mono si besoin
+    data = data.mean(axis =1)
+data = np.block([data, np.zeros(2**(int(np.log2(len(data)))+1)-len(data))])
+data /= (np.max(np.abs(data)) + 1*10**(-12))#normalisation
+freq = np.fft.rfftfreq(len(data), d=1.0/fe)
+
+fmin,fmax=5000,5000
+plt.plot(freq,np.abs(np.fft.rfft(data)))
+plt.plot(freq,np.abs(np.fft.rfft(lb.coupe_bande(fmin,fmax,data,freq))))
+plt.xlabel("Frequence , Hz " )
+plt.ylabel("Amplitude")
+plt.show()
+#%% TEST Son final
+fe, x = wavfile.read("Data\Série_de_Fourier_BE_Ma312_2025.wav")
+x = x.astype(np.float32)
+if x.ndim == 2:
+    x = x.mean(axis=1)
+x /= (np.max(np.abs(x)) + 1e-12)
+
+lenght_sec = 47998
+
+extrait = x[5*lenght_sec:34*lenght_sec]
+extrait1 = lb.tremolo(extrait[:7*lenght_sec], 44100, 0.035, 1)
+extrait2 = lb.frequency_shift(lb.ring_modulation(lb.egalisateur(extrait[7*lenght_sec: int(12.4*lenght_sec)],1,1,2,4,4,4), 44100, 100), 100, 44100)
+extrait3 = lb.frequency_shift(lb.ring_modulation(lb.egalisateur(extrait[int(12.4 *lenght_sec): int(17.95* lenght_sec) ],5,5,3,0,0,0), 44100, 100), 100, 44100)
+extrait4 = lb.frequency_shift(lb.ring_modulation(lb.egalisateur(extrait[int(17.95*lenght_sec): 34*lenght_sec],2,2,2,4,4,4), 44100, 200), 200, 44100)
+signal = np.block([ extrait1, extrait2, extrait3, extrait4])
+sd.play(signal, fe)
+time.sleep(len(extrait) / fe)  # permet d'écouter un son
+sd.stop()
