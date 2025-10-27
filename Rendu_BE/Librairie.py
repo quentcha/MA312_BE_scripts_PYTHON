@@ -84,7 +84,7 @@ def filtrage_amp(data, A1, A2):  # Soient A1 et A2 les amplitudes des bornes
 
     fe, x = wavfile.read(data)
     x = x.astype(np.float32)
-    if x.ndim == 2:
+    if x.ndim == 2:     # On extrait le son
         x = x.mean(axis=1)
     x /= (np.max(np.abs(x)) + 1e-12)
 
@@ -238,6 +238,8 @@ def frequency_shift(data,shift,fe):##erreur va s'additionner car on arrondi et p
     elif shift<0:
         spectre = spectre[int(abs(shift)/pas):]
     return np.fft.irfft(spectre,n=len(data))
+
+
 
 
 
