@@ -7,21 +7,33 @@ def autocorrelation(data):
     correlated_data=dataA*dataB
     return np.fft.irfft(correlated_data)
 
-def passe_coupe_bande(fmin,fmax,data,freq):
+def passe_bande(fmin,fmax,data,freq):
     spectre = np.fft.rfft(data)
     spectre_coupe= np.zeros(len(spectre), dtype=complex)
     for i in range(len(freq)):
-        if freq[i]>fmin and freq[i]<fmax:
+        if freq[i]>=fmin and freq[i]<=fmax:
             spectre_coupe[i]=spectre[i]
+    return np.fft.irfft(spectre_coupe)
+def coupe_bande(fmin,fmax,data,freq):
+    spectre = np.fft.rfft(data)
+    spectre_coupe= np.copy(spectre)
+    for i in range(len(freq)):
+        if freq[i]>=fmin and freq[i]<=fmax:
+            spectre_coupe[i]=0
     return np.fft.irfft(spectre_coupe)
 def analyse(data):
     data = np.block([data, np.zeros(2**(int(np.log2(len(data)))+1)-len(data))]) #optimisation pour fft
+    fe = 30
+    freq = np.fft.rfftfreq(len(data), d=1.0/fe)
 
     mini,maxi=35,180#plage accepté
     print("FILTRAGE DE",mini/60,"Hz à",maxi/60,"Hz")
-    fe = 30
-    freq = np.fft.rfftfreq(len(data), d=1.0/fe)
-    data=passe_coupe_bande(mini/60,maxi/60,data,freq)#filtrage en fonction de la plage de bpm
+    data=passe_bande(mini/60,maxi/60,data,freq)#filtrage en fonction de la plage de bpm
+
+    freqSecteur=[i*50 for i in range(1,5)]
+    print("FILTRAGE DE",freqSecteur[0],"Hz et ses harmoniques")
+    for f in freqSecteur:
+        data=coupe_bande(f,f,data,freq)
 
     print("AUTOCORRELATION")
     data=autocorrelation(data)
@@ -38,6 +50,11 @@ def analyse(data):
         copySpectre[id]=0
         copySpectre=np.copy(copySpectre)
         id=np.argmax(abs(copySpectre))
+
+    plt.stem(freq, abs(spectre), linefmt='b-', markerfmt='bo', basefmt='r-')
+    plt.xlabel("Frequence , Hz ")
+    plt.ylabel("Intensité")
+    plt.show()
 
     return top
 
@@ -79,6 +96,7 @@ while True:
 
             print(f"COLLECTE D'IMAGE :{round(compteur/longueur_captation,2)*100} % | RESULTAT PRECEDENT : {res}")
             compteur+=1
+            break
 
     if len(faces)==0:
         compteur=0

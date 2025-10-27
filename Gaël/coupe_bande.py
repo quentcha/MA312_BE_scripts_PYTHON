@@ -18,7 +18,7 @@ data = np.block([data, np.zeros(2**(int(np.log2(len(data)))+1)-len(data))])
 data /= (np.max(np.abs(data)) + 1*10**(-12))#normalisation
 freq = np.fft.rfftfreq(len(data), d=1.0/fe)
 
-fmin,fmax=500,500
+fmin,fmax=5000,5000
 plt.plot(freq,np.abs(np.fft.rfft(data)))
 plt.plot(freq,np.abs(np.fft.rfft(coupe_bande(fmin,fmax,data,freq))))
 plt.xlabel("Frequence , Hz " )
