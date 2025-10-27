@@ -91,19 +91,6 @@ def filtrage_amp(data, A1, A2):  # Soient A1 et A2 les amplitudes des bornes
     plt.show()
 
     son = np.fft.irfft(spectre_filtre)
-    '''
-    # On applique la transformée inverse de Fourier pour récupérer le son égalisé:
-
-
-    sd.play(son, fe)
-    time.sleep(len(son) / fe)  # permet d'écouter un son
-    sd.stop()
-
-    # Optionnel: on peut jouer à la suite les deux sons pour les comparer.
-    sd.play(x,fe)
-    time.sleep(len(son) / fe)  # permet d'écouter un son
-    sd.stop()
-    '''
     return son
 
 def seuillage(data, fe, thau, k):  # Soit thau le seuil et k le coefficient de réduction
