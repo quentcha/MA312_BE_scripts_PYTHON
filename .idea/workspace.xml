@@ -72,7 +72,7 @@
       <workItem from="1761140865813" duration="2071000" />
       <workItem from="1761233832939" duration="8123000" />
       <workItem from="1761378182644" duration="10524000" />
-      <workItem from="1761554035821" duration="776000" />
+      <workItem from="1761554035821" duration="1273000" />
     </task>
     <servers />
   </component>
@@ -82,7 +82,7 @@
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/MA312_BE_scripts_PYTHON$Seuillage.coverage" NAME="Seuillage Coverage Results" MODIFIED="1761247422273" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Gaël" />
     <SUITE FILE_PATH="coverage/MA312_BE_scripts_PYTHON$son_final.coverage" NAME="son_final Coverage Results" MODIFIED="1761382513106" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Gaël" />
-    <SUITE FILE_PATH="coverage/MA312_BE_scripts_PYTHON$FiltrageAmplitude.coverage" NAME="FiltrageAmplitude Coverage Results" MODIFIED="1761554578028" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Gaël" />
+    <SUITE FILE_PATH="coverage/MA312_BE_scripts_PYTHON$FiltrageAmplitude.coverage" NAME="FiltrageAmplitude Coverage Results" MODIFIED="1761555296077" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Gaël" />
     <SUITE FILE_PATH="coverage/MA312_BE_scripts_PYTHON$main.coverage" NAME="main Coverage Results" MODIFIED="1761554334505" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Rendu_BE" />
     <SUITE FILE_PATH="coverage/MA312_BE_scripts_PYTHON$Tremolo.coverage" NAME="Tremolo Coverage Results" MODIFIED="1761387119822" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Gaël" />
     <SUITE FILE_PATH="coverage/MA312_BE_scripts_PYTHON$Librairie.coverage" NAME="Librairie Coverage Results" MODIFIED="1761554815067" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Rendu_BE" />
