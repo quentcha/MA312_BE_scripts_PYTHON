@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 
 # Lecture du fichier
-fichier = Path(r"C:\Users\Enzo\Documents\Cours 2025-2026\Analyse harmonique pour l'ingénieur\BE\Série_de_Fourier_BE_Ma312_2025.wav")
+fichier = Path(r"Série_de_Fourier_BE_Ma312_2025.wav")
 fe, data = wavfile.read(fichier)
 data = data.astype(np.float32)
 if data.ndim == 2:
