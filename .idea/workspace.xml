@@ -4,7 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3478df39-ef2b-4a5f-bd9f-5473a442d301" name="Changes" comment="" />
+    <list default="true" id="3478df39-ef2b-4a5f-bd9f-5473a442d301" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rendu_BE/Data/20-20_000-Hz-Audio-Sweep.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rendu_BE/Data/Série_de_Fourier_BE_Ma312_2025.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rendu_BE/Data/guitare1.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rendu_BE/Librairie.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rendu_BE/main.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rendu_BE/son_final.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/quentin/BPManalyse/version_doigt.py" beforeDir="false" afterPath="$PROJECT_DIR$/quentin/BPManalyse/version_doigt.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quentin/BPManalyse/version_visage.py" beforeDir="false" afterPath="$PROJECT_DIR$/quentin/BPManalyse/version_visage.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -19,6 +29,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
@@ -41,10 +54,11 @@
     "Python.coupeBande.executor": "Run",
     "Python.main.executor": "Run",
     "Python.son_final.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "/Users/gaelgauthier/Documents/GitHub/MA312_BE_scripts_PYTHON/Rendu_BE",
+    "last_opened_file_path": "C:/Users/quent",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -66,6 +80,7 @@
       </set>
     </attachedChunks>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="3478df39-ef2b-4a5f-bd9f-5473a442d301" name="Changes" comment="" />
@@ -86,6 +101,17 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

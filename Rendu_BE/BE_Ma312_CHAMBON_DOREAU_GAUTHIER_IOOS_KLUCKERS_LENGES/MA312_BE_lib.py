@@ -1,8 +1,13 @@
-import sounddevice as sd
-import time
-from scipy.io import wavfile
+#Author :
+#Quentin CHAMBON
+#Enzo DOREAU
+#Gael GAUTHIER
+#Axel IOOS
+#Gaspar KLUCKERS
+#Louis LENGES
+
 import numpy as np
-import matplotlib.pyplot as plt
+
 
 
 def egalisateur(data, k1, k2, k3, k4, k5, k6):  # Soient ki, les coefficients multiplicateurs des bandes définies
@@ -41,37 +46,14 @@ def egalisateur(data, k1, k2, k3, k4, k5, k6):  # Soient ki, les coefficients mu
     spectre_filtre[a_index_min:a_index_max] = k5 * spectre_filtre[a_index_min:a_index_max]
     spectre_filtre[ta_index_min:ta_index_max] = k6 * spectre_filtre[ta_index_min:ta_index_max]
 
-    # On renvoie le spectre initial et le spectre égalisé afin de les comparer:
-    plt.xlabel("Fréquence (Hz)")
-    plt.ylabel("Amplitude")
-    plt.plot(freq, np.abs(spectre), "g")
-    plt.plot(freq, np.abs(spectre_filtre), "r")
-    plt.show()
-
     # On applique la transformée inverse de Fourier pour récupérer le son égalisé:
     son = np.fft.irfft(spectre_filtre)
-    '''son = np.fft.irfft(spectre_filtre)
-    sd.play(son, fe)
-    time.sleep(len(son) / fe)  # permet d'écouter un son
-    sd.stop()
-
-    # Optionnel: on peut jouer à la suite les deux sons pour les comparer.
-    sd.play(x,fe)
-    time.sleep(len(son) / fe)  # permet d'écouter un son
-    sd.stop()'''
 
     return son
 
 def filtrage_amp(data, A1, A2):  # Soient A1 et A2 les amplitudes des bornes
 
-    fe, x = wavfile.read(data)
-    x = x.astype(np.float32)
-    if x.ndim == 2:     # On extrait le son
-        x = x.mean(axis=1)
-    x /= (np.max(np.abs(x)) + 1e-12)
-
-    spectre = np.fft.rfft(x)  # On calcule le spectre du signal avec la transformée de Fourier
-    freq = np.fft.rfftfreq(len(x), d=1.0 / fe)
+    spectre = np.fft.rfft(data)  # On calcule le spectre du signal avec la transformée de Fourier
 
     spectre_filtre = np.zeros(len(spectre), dtype=complex)  # On crée une liste vide qui va accueillir le spectre filtré
     for i in range(len(spectre)):
@@ -81,22 +63,12 @@ def filtrage_amp(data, A1, A2):  # Soient A1 et A2 les amplitudes des bornes
         else:
             spectre_filtre[i] = a
 
-    # On renvoie le plot du spectre initial et du spectre filtré pour les comparer:
-
-    plt.xlabel("Fréquence (Hz)")
-    plt.ylabel("Amplitude")
-    plt.plot(freq, np.abs(spectre), "r")
-    plt.plot(freq, np.abs(spectre_filtre), "g")
-    plt.grid(True)
-    plt.show()
-
     son = np.fft.irfft(spectre_filtre)
     return son
 
-def seuillage(data, fe, thau, k):  # Soit thau le seuil et k le coefficient de réduction
+def seuillage(data, thau, k):  # Soit thau le seuil et k le coefficient de réduction
 
     spectre = np.fft.rfft(data)  # On calcule le spectre du signal avec la transformée de Fourier
-    freq = np.fft.rfftfreq(len(data), d=1.0 / fe)
     spectre_filtre = []  # On crée une liste vide qui va accueillir le spectre filtré
     for i in range(len(spectre)):
         a = np.abs(spectre[i])
@@ -107,34 +79,26 @@ def seuillage(data, fe, thau, k):  # Soit thau le seuil et k le coefficient de r
 
     son = np.fft.irfft(spectre_filtre)
 
-    # On renvoie le plot du spectre initial et du spectre filtré pour les comparer:
-
-    plt.xlabel("Fréquence (Hz)")
-    plt.ylabel("Amplitude")
-    plt.plot(freq, np.abs(spectre), "r")
-    plt.plot(freq, np.abs(spectre_filtre), "g")
-    plt.show()
-
-    '''
-    # On applique la transformée inverse de Fourier pour récupérer le son égalisé:
-
-
-    sd.play(son, fe)
-    time.sleep(len(son) / fe)  # permet d'écouter un son
-    sd.stop()
-
-    # Optionnel: on peut jouer à la suite les deux sons pour les comparer.
-    #sd.play(x,fe)
-    #time.sleep(len(son) / fe)  # permet d'écouter un son
-    #sd.stop()'''
     return son
 
 def tremolo(signal, sampling_rate= 44100, ft=0.5, depth=1):
-
+    #On applique un tremolo
     t = np.linspace(0, len(signal)/sampling_rate, len(signal))
     son = signal * (1 - depth * np.abs(np.cos(np.pi * t *ft)))
-    return son
 
+    return son
+def pitch(data,n_octave):#pitch shift pur
+    #freq*2 pour +1 octave
+    spectre = np.fft.rfft(data)
+    spectre_pitch=np.zeros(len(spectre), dtype=complex)
+    #On divise par 2**n_octave chaque fréquence
+    for i in range(len(spectre)):
+        index=int(i/(2**n_octave))
+        if index < len(spectre):
+            spectre_pitch[i]=spectre[index]
+
+    inverse=np.fft.irfft(spectre_pitch,n=len(data))
+    return inverse
 def ring_modulation(signal, sampling_rate= 44100, fp=400.0):
 
     t = np.linspace(0, len(signal) / sampling_rate, len(signal))
@@ -153,12 +117,14 @@ def ring_modulation(signal, sampling_rate= 44100, fp=400.0):
     return signal_traite
 
 def frequency_shift(data,shift,fe):#erreur va s'additionner car on arrondi les perte des hautes fréquences
-
+    #décale le spectre d'un certain nombre de fréquences selon shift
     spectre = np.fft.rfft(data)
     freq=np.fft.rfftfreq(data.size, d=1./fe)
     pas=freq[1]-freq[0]
+    #Si le shift est positif
     if shift>0:
         spectre = np.block([np.zeros(int(abs(shift)/pas)),spectre])
+    #Si le shift est négatif
     elif shift<0:
         spectre = spectre[int(abs(shift)/pas):]
     return np.fft.irfft(spectre,n=len(data))
@@ -251,6 +217,7 @@ def analyse(data):
         copySpectre=np.copy(copySpectre)
         #Detection de la fréquence dominante
         id=np.argmax(abs(copySpectre))
+
     return top
 
 

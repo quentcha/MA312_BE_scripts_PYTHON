@@ -85,11 +85,6 @@ def analyse(data):
         #Detection de la fréquence dominante
         id=np.argmax(abs(copySpectre))
 
-    plt.stem(freq, abs(spectre), linefmt='b-', markerfmt='bo', basefmt='r-')
-    plt.xlabel("Frequence , Hz ")
-    plt.ylabel("Intensité")
-    plt.show()
-
     return top
 
 #(°,°,°) -> (blue, green, red)

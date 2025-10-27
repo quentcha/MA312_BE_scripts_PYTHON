@@ -22,7 +22,7 @@ def passe_bande(fmin,fmax,data,freq):
     spectre = np.fft.rfft(data)
     # On initialise le spectre modifié
     spectre_coupe= np.zeros(len(spectre), dtype=complex)
-    #Pour toute les fréquences, si la fréquence est comprise 
+    #Pour toute les fréquences, si la fréquence est comprise
     #dans la plage de valeur alors on la garde,
     #sinon elle est égale à 0
     for i in range(len(freq)):
@@ -39,7 +39,7 @@ def coupe_bande(fmin,fmax,data,freq):
     spectre = np.fft.rfft(data)
     #On initialise le spectre modifié
     spectre_coupe= np.copy(spectre)
-    #Pour toutes les fréquences, si la fréquence est comprise dans la plage de 
+    #Pour toutes les fréquences, si la fréquence est comprise dans la plage de
     #valeur alors on la garde sinon elle est égale à 0
     for i in range(len(freq)):
         if freq[i]>=fmin and freq[i]<=fmax:
@@ -54,31 +54,43 @@ def analyse(data):
     #Array de fréquences
     freq = np.fft.rfftfreq(len(data), d=1.0/fe)
     #plage de valeurs acceptée
-
+    mini,maxi=35,180
+    print("FILTRAGE DE",mini/60,"Hz à",maxi/60,"Hz")
+    #Filtrage en fonction de la plage de BPM acceptables
+    data=passe_bande(mini/60,maxi/60,data,freq)
+    # On créer une liste de la fréquence et ses harmoniques associées au secteur
     freqSecteur=[i*50 for i in range(1,5)]
     print("FILTRAGE DE",freqSecteur[0],"Hz et ses harmoniques")
     #On applique le filtre coupe bande sur toutes les fréquences de la liste
     for f in freqSecteur:
-        data=coupe_bande(f,f,data,freq)#filtrage en fonction de la fréquence du secteur et ses harmoniques
+        data=coupe_bande(f,f,data,freq)
 
-    mini,maxi=35,180#plage accepté
-    print("FILTRAGE DE",mini/60,"Hz à",maxi/60,"Hz")
-    data=passe_bande(mini/60,maxi/60,data,freq)#filtrage en fonction de la plage de bpm
-
+    #On applique l'autocorrelation
     print("AUTOCORRELATION")
     data=autocorrelation(data)
 
-    print("TRANSFORMATION DE FOURIER ------------------------------------------------------------------------")
+    #On applique la transformée de Fourier pour passer du domaine temporel au domaine fréquentiel
+    print("TRANSFORMEE DE FOURIER")
     spectre=np.fft.rfft(data)
-    max = np.argmax(abs(spectre))# Trouve l'indice du pic d'intensité
+    #Trouve l'indice du pic d'intensité dominant
+    max = np.argmax(abs(spectre))
     #Initialisation d'une liste qui contiendra les fréquences dominantes
+    top=[]
+    #Initialisation d'un array facilement manipulable
+    copySpectre=np.copy(spectre)
+    #Recherche de l'index de l'intensité la plus importante
+    id=np.argmax(abs(copySpectre))
+    #On cherche les fréquences dominantes
+    while abs(copySpectre[id])>1*10**(-10):
+        #Ajout de la fréquence dominante à la liste top
+        top.append(freq[id]*60)
+        #Suppression de l'intensité liée à la fréquence dominante
+        copySpectre[id]=0
+        copySpectre=np.copy(copySpectre)
+        #Detection de la fréquence dominante
+        id=np.argmax(abs(copySpectre))
 
-    plt.stem(freq, abs(spectre), linefmt='b-', markerfmt='bo', basefmt='r-')
-    plt.xlabel("Frequence , Hz ")
-    plt.ylabel("Intensité")
-    plt.show()
-
-    return freq[max]*60#conversion en BPM
+    return top
 
 #(°,°,°) -> (blue, green, red)
 print("INITIALISATION CAMERA")
