@@ -7,22 +7,6 @@ import matplotlib.pyplot as plt
 
 def egalisateur(data, k1, k2, k3, k4, k5, k6):  # Soient ki, les coefficients multiplicateurs des bandes définies
 
-    """
-    Cette fonction permet d'amplifier ou de réduire l'amplitude de fréquences ciblées sur un signal sonore.
-    On définit les 6 plages de fréquences auxquelles on appliquera les coefficients pris en compte dans la fonction:
-
-    Basse : 0-100 Hz
-
-    Basse-médium : 101-200 Hz
-
-    Médium-grave : 201-400 Hz
-
-    Médium-aigu : 401-800 Hz
-
-    Aigu : 0,801-5 kHz
-
-    Très aigu: 5-20 kHz"""
-
     fe = 44100
     spectre = np.fft.rfft(data)  # On calcule le spectre du signal avec la transformée de Fourier
     freq = np.fft.rfftfreq(len(data), d=1.0 / fe)
@@ -80,8 +64,6 @@ def egalisateur(data, k1, k2, k3, k4, k5, k6):  # Soient ki, les coefficients mu
 
 def filtrage_amp(data, A1, A2):  # Soient A1 et A2 les amplitudes des bornes
 
-    """"Cette fonction renvoie un son débarrassé des fréquences où l'amplitude n'est pas comprise entre A1 et A2. Elle prend en argument le nom du fichier sonore que nous souhaitons filtrer"""
-
     fe, x = wavfile.read(data)
     x = x.astype(np.float32)
     if x.ndim == 2:     # On extrait le son
@@ -126,17 +108,6 @@ def filtrage_amp(data, A1, A2):  # Soient A1 et A2 les amplitudes des bornes
 
 def seuillage(data, fe, thau, k):  # Soit thau le seuil et k le coefficient de réduction
 
-    '''
-    Cette fonction a pour but de multiplier par un coefficient k (inférieur ou égal à 1) les amplitudes inférieures à thau. Ce procédé vise
-    à diminuer les bruits de fond. Elle prend en argument l'array du fichier sonore.
-
-    :param data: Le signal audio d'entrée en array
-    :param fe: Le taux d'échantillonnage (Hz)
-    :param thau: Amplitude seuil
-    :param k: Le coefficient qu'on appliquera aux amplitudes
-    :return: Signal filtré
-    '''
-
     spectre = np.fft.rfft(data)  # On calcule le spectre du signal avec la transformée de Fourier
     freq = np.fft.rfftfreq(len(data), d=1.0 / fe)
     spectre_filtre = []  # On crée une liste vide qui va accueillir le spectre filtré
@@ -172,36 +143,12 @@ def seuillage(data, fe, thau, k):  # Soit thau le seuil et k le coefficient de r
     return son
 
 def tremolo(signal, sampling_rate= 44100, ft=0.5, depth=1):
-    """
-    Applique un effet de trémolo sur le signal.
-    Le trémolo est un effet sonore qui applique une fonction sinusoïdale
-    strictement positive (car une amplitude ne peut pas être négative) à l'amplitude du signal d'entrée.
-    Cela aura pour effet de diminuer puis rétablir l'instensité du son de façon périodique.
-
-    :param signal: Le signal audio d'entrée en array
-    :param sampling_rate: La fréquence d'échantillonnage (Hz)
-    :param ft (fréquence du trémolo): Détermine la périodicité de l'effet, généralement on prend des fréquences très basses afin que l'effet soit prononcé ( entre 0.5 et 10 Hz)
-    :param depth: détermine l'amplitude de l'effet
-    :return: Le signal avec l'effet
-    """
 
     t = np.linspace(0, len(signal)/sampling_rate, len(signal))
     son = signal * (1 - depth * np.abs(np.cos(np.pi * t *ft)))
     return son
 
 def ring_modulation(signal, sampling_rate= 44100, fp=400.0):
-    """
-    Applique l'effet Ring Modulation.
-
-    Le signal d'entrée est multiplié par une onde porteuse sinusoïdale
-    à la fréquence.
-
-    :param signal: Le signal audio d'entrée en array
-    :param sampling_rate: Le taux d'échantillonnage (Hz)
-    :param fp: Fréquence de la porteuse (Hz, souvent audible)
-    :return: Signal avec l'effet de modulation en anneau appliqué
-    """
-
 
     t = np.linspace(0, len(signal) / sampling_rate, len(signal))
 
@@ -218,8 +165,8 @@ def ring_modulation(signal, sampling_rate= 44100, fp=400.0):
 
     return signal_traite
 
-def frequency_shift(data,shift,fe):##erreur va s'additionner car on arrondi et perte des hautes fréquences
-    """Ce code décale la fréquence de la fréquence shift"""
+def frequency_shift(data,shift,fe):#erreur va s'additionner car on arrondi les perte des hautes fréquences
+
     spectre = np.fft.rfft(data)
     freq=np.fft.rfftfreq(data.size, d=1./fe)
     pas=freq[1]-freq[0]
