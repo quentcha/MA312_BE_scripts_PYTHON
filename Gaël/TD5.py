@@ -95,7 +95,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-tempo = 1/4
+tempo = 0.2
 amplitude = 1
 echantillonage = 44100
 temps = tempo / 4

@@ -1,45 +1,55 @@
-import numpy as np
-import play
+import sounddevice as sd
+import time
 from scipy.io import wavfile
+import numpy as np
 import matplotlib.pyplot as plt
 
-def convolution(dataA, dataB):
-    dataA, dataB=np.fft.rfft(dataA), np.fft.rfft(dataB)
-    if len(dataB)>len(dataA):dataA=np.block([dataA,np.zeros(len(dataB)-len(dataA))])
-    elif len(dataA)>len(dataB):dataB=np.block([dataB,np.zeros(len(dataA)-len(dataB))])
-    dataC=dataA*dataB
-    return np.fft.irfft(dataC)
 
 
-def f(t,freq):
-    return 0.8*np.sin(2*np.pi*t*freq)
-def g(t,freq1,freq2):
-    return 0.8*np.sin(2*np.pi*t*freq1)+0.8*np.sin(2*np.pi*t*freq2)
+def conv_fft(signal, impulse_response):
+    """
+    Code utilisant la FFT pour calculer la convolution.
 
-fe, data= wavfile.read('Série_de_Fourier_BE_Ma312_2025.wav')
-data = data.astype(np.float32)
-if data.ndim == 2 : #stéréo -> mono si besoin
-    data = data.mean(axis =1)
-data = np.block([data, np.zeros(2**(int(np.log2(len(data)))+1)-len(data))])
+    :param signal: Signal audio d'entrée (array NumPy)
+    :param impulse_response: Réponse impulsionnelle (array NumPy)
+    :return: Signal audio convolé
+    """
 
-fe=30
-duree=2
-t=np.linspace(0 , duree , fe*duree)
+    # Conserve le type de données du signal d'entrée
+    dtype = str(signal.dtype)
 
-convoluted_data=convolution(f(t,100),g(t,100,200))
+    # Calculer la longueur de la convolution (signal + IR - 1)
+    # C'est la taille nécessaire pour le zero-padding
+    N = len(signal) + len(impulse_response) - 1
 
-print("plotting...")
-freq = np.fft.rfftfreq(len(f(t,100)), d=1.0/fe)
-plt.stem(freq, np.abs(np.fft.rfft(convoluted_data)), linefmt='r-', markerfmt='ro', basefmt='r-')
-plt.stem(freq, np.abs(np.fft.rfft(f(t,100))), linefmt='g-', markerfmt='go', basefmt='g-')
-plt.stem(freq, np.abs(np.fft.rfft(f(t,120))), linefmt='b-', markerfmt='bo', basefmt='b-')
-plt.xlabel("Frequence , Hz ")
-plt.ylabel("Amplitude")
-plt.show()
+    # Calculer la FFT du signal et de la réponse impulsionnelle avec un zéro-padding
+    # L'argument n=N assure le padding jusqu'à la longueur N
+    X = np.fft.rfft(signal, n=N)
+    H = np.fft.rfft(impulse_response, n=N)
 
-print("plotting")
-plt.plot(convoluted_data)
-plt.show()
-print("playing")
-play.sound(f(t,1000),fe)
-play.sound(convoluted_data,fe)
+    # Convolution dans le domaine fréquentiel (multiplication point par point)
+    # C'est l'étape clé : F(f * h) = F(f) * F(h)
+    Y = X * H
+
+    # Appliquer la FFT inverse pour revenir au domaine temporel
+    y = np.fft.irfft(Y)
+
+    # Retourner la partie du signal qui correspond à la longueur du signal original
+    # et s'assurer que le type de données est conservé.
+    return y[:len(signal)].astype(dtype)
+
+#TEST
+
+fe, x = wavfile.read("Série_de_Fourier_BE_Ma312_2025.wav")
+x = x.astype(np.float32)
+if x.ndim == 2:
+    x = x.mean(axis=1)
+x /= (np.max(np.abs(x)) + 1e-12)
+
+lenght_sec = 47998
+
+extrait = x[:34*lenght_sec]
+extrait_conv = conv_fft(extrait, extrait)
+sd.play(extrait_conv, fe)
+time.sleep(len(extrait) / fe)  # permet d'écouter un son
+sd.stop()

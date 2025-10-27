@@ -49,4 +49,4 @@ def filtrage_amp(data, A1, A2): # Soient A1 et A2 les amplitudes des bornes
  # TEST
 
 #filtrage_amp("guitare1.wav", 5000, 8000)
-filtrage_amp(r"TechnoSerieDeFourier.wav", 1000, 50000)
+#filtrage_amp(r"TechnoSerieDeFourier.wav", 1000, 50000)

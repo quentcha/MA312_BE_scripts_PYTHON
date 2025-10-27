@@ -4,24 +4,26 @@ from scipy.io import wavfile
 import numpy as np
 import matplotlib.pyplot as plt
 
-"""
-Cette fonction permet d'amplifier ou de réduire l'amplitude de fréquences ciblées sur un signal sonore.
-On définit les 6 plages de fréquences auxquelles on appliquera les coefficients pris en compte dans la fonction:
 
-Basse : 0-100 Hz
-
-Basse-médium : 101-200 Hz
-
-Médium-grave : 201-400 Hz
-
-Médium-aigu : 401-800 Hz
-
-Aigu : 0,801-5 kHz
-
-Très aigu: 5-20 kHz"""
 
 
 def egalisateur(data, k1, k2, k3, k4, k5, k6): # Soient ki, les coefficients multiplicateurs des bandes définies
+
+    """
+    Cette fonction permet d'amplifier ou de réduire l'amplitude de fréquences ciblées sur un signal sonore.
+    On définit les 6 plages de fréquences auxquelles on appliquera les coefficients pris en compte dans la fonction:
+
+    Basse : 0-100 Hz
+
+    Basse-médium : 101-200 Hz
+
+    Médium-grave : 201-400 Hz
+
+    Médium-aigu : 401-800 Hz
+
+    Aigu : 0,801-5 kHz
+
+    Très aigu: 5-20 kHz"""
 
     fe = 44100
     spectre = np.fft.rfft(data)                    # On calcule le spectre du signal avec la transformée de Fourier

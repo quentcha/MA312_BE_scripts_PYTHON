@@ -18,7 +18,7 @@ def ring_modulation(signal, sampling_rate= 44100, fp=400.0):
     :param fp: Fréquence de la porteuse (Hz, souvent audible)
     :return: Signal avec l'effet de modulation en anneau appliqué
     """
-    dtype = str(signal.dtype)
+
 
     t = np.linspace(0, len(signal) / sampling_rate, len(signal))
 
@@ -50,5 +50,38 @@ signal = np.block([x_rm])
 signal = np.block([signal, signal])
 sd.play(signal, fe)
 time.sleep(len(signal) / fe)  # permet d'écouter un son
+sd.stop()
+'''
+
+'''
+duree = 2
+sampling_rate = 44100
+nb_points = int(duree * sampling_rate)
+
+t = np.linspace(0, duree, nb_points, endpoint=False)
+
+
+frequence_signal = 392
+x = np.sin(2 * np.pi * t * frequence_signal)
+
+
+x_rm = ring_modulation(x, sampling_rate, 200)
+
+
+plt.figure(figsize=(12, 5))
+plt.title("Signal Original vs. Signal Ring Modulation ")
+plt.xlabel("Temps (s)")
+plt.ylabel("Amplitude")
+
+
+# On ne trace pas la valeur absolue pour les signaux**
+plt.plot(t, x, "r", alpha=0.3, label="Signal Original (392 Hz)")
+plt.plot(t, x_rm, "g", label="Signal Ring_modulation (Modulation à 400 Hz)")
+plt.grid(True, alpha=0.5)
+plt.legend()
+plt.show()
+
+sd.play(x_rm, sampling_rate)
+time.sleep(len(x_rm) / sampling_rate)  # permet d'écouter un son
 sd.stop()
 '''
